@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="FreshPlate">
+  <rect width="512" height="512" fill="#F4F4F0" />
+  <polygon
+    points="256,96 295,125 341,119 360,163 405,184 391,230 417,272 384,307 391,354 346,377 330,421 283,420 256,456 228,420 181,421 165,377 120,354 127,307 94,272 120,230 106,184 151,163 170,119 216,125"
+    fill="#FFD91A"
+    stroke="#1C1B19"
+    stroke-width="14"
+    stroke-linejoin="round"
+  />
+  <text x="256" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="130" font-weight="700" fill="#1C1B19">FP</text>
+</svg>

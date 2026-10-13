@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-ground text-ink antialiased;
+  font-family: "Zen Kaku Gothic New", "Hiragino Sans", system-ui, sans-serif;
+  overscroll-behavior-y: none;
+}
+
+::selection {
+  background: #ffd91a;
+  color: #1c1b19;
+}
+
+input,
+textarea,
+select {
+  caret-color: #1c1b19;
+}
+
+:focus-visible {
+  outline: 2px solid #1c1b19;
+  outline-offset: 2px;
+}
+
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #b9b7ad transparent;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #b9b7ad;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@layer components {
+  .tag-burst {
+    clip-path: polygon(
+      50% 0%,
+      63.3% 9.1%,
+      79.4% 9.6%,
+      84.8% 24.7%,
+      97.5% 34.6%,
+      93% 50%,
+      97.5% 65.4%,
+      84.8% 75.3%,
+      79.4% 90.4%,
+      63.3% 90.9%,
+      50% 100%,
+      36.7% 90.9%,
+      20.6% 90.4%,
+      15.2% 75.3%,
+      2.5% 65.4%,
+      7% 50%,
+      2.5% 34.6%,
+      15.2% 24.7%,
+      20.6% 9.6%,
+      36.7% 9.1%
+    );
+  }
+
+  .receipt-edge {
+    --pink: 9px;
+    -webkit-mask:
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom /
+        var(--pink) calc(var(--pink) / 2) repeat-x,
+      conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--pink)
+        calc(var(--pink) / 2) repeat-x,
+      linear-gradient(#000 0 0) center / 100% calc(100% - var(--pink)) no-repeat;
+    mask:
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom /
+        var(--pink) calc(var(--pink) / 2) repeat-x,
+      conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--pink)
+        calc(var(--pink) / 2) repeat-x,
+      linear-gradient(#000 0 0) center / 100% calc(100% - var(--pink)) no-repeat;
+  }
+
+  .barcode {
+    background-image: repeating-linear-gradient(
+      to right,
+      #1c1b19 0,
+      #1c1b19 1px,
+      transparent 1px,
+      transparent 3px,
+      #1c1b19 3px,
+      #1c1b19 5px,
+      transparent 5px,
+      transparent 9px
+    );
+  }
+
+  .shelf-rail {
+    border-bottom: 3px double #1c1b19;
+  }
+
+  .lattice {
+    background-image: repeating-linear-gradient(
+      to right,
+      #ffffff 0,
+      #ffffff 1px,
+      transparent 1px,
+      transparent 4px,
+      #ffffff 4px,
+      #ffffff 7px,
+      transparent 7px,
+      transparent 13px
+    );
+  }
+}
+
+@keyframes tag-pop {
+  0% {
+    transform: scale(0.72) rotate(-14deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(-6deg);
+    opacity: 1;
+  }
+}
+
+@keyframes stamp-in {
+  0% {
+    transform: scale(1.35) rotate(-12deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(-6deg);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-away {
+  to {
+    transform: translateX(24px) rotate(2deg);
+    opacity: 0;
+    max-height: 0;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.tag-pop {
+  animation: tag-pop 240ms cubic-bezier(0.16, 0.84, 0.24, 1) both;
+}
+
+.stamp-in {
+  animation: stamp-in 200ms cubic-bezier(0.16, 0.84, 0.24, 1) both;
+}
+
+.slide-away {
+  animation: slide-away 220ms ease-out both;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag-pop,
+  .stamp-in,
+  .slide-away {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
