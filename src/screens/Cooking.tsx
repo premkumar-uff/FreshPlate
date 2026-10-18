@@ -159,7 +159,7 @@ export default function Cooking() {
 
   return (
     <div className="min-h-full px-4 pb-10 pt-4 lg:px-8">
-      <div className="mx-auto flex w-full max-w-xl flex-col gap-4">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
         <BackHeader
           title="On the line"
           subtitle={recipe.name}
@@ -167,7 +167,7 @@ export default function Cooking() {
             <Link
               to="/voice"
               aria-label="Voice help"
-              className="grid h-9 w-9 place-items-center rounded-[8px] border-[1.5px] border-ink bg-tag-canary text-ink"
+              className="grid h-10 w-10 place-items-center rounded-[8px] border-[1.5px] border-ink bg-tag-canary text-ink"
             >
               <Mic size={17} />
             </Link>

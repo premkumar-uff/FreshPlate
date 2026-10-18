@@ -39,7 +39,7 @@ export default function Layout() {
                 </span>
               </NavLink>
               <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-soft">
-                Open · cook what&apos;s closest
+                Cook what&apos;s closest
               </p>
             </div>
 
@@ -70,7 +70,7 @@ export default function Layout() {
 
         <div className="flex min-w-0 flex-1 flex-col">
           {!focus ? (
-            <header className="sticky top-0 z-40 flex items-center justify-between border-b border-rule bg-ground/95 px-4 py-3 backdrop-blur-sm lg:hidden">
+            <header className="sticky top-0 z-40 flex items-center justify-between border-b border-rule bg-ground/95 px-4 pb-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] backdrop-blur-sm lg:hidden">
               <NavLink to="/" className="flex items-center gap-2">
                 <span className="grid h-7 w-7 place-items-center rounded-full bg-tag-canary font-mono text-[11px] font-bold text-ink ring-[1.5px] ring-ink">
                   FP
@@ -80,14 +80,18 @@ export default function Layout() {
               <button
                 onClick={() => navigate("/voice")}
                 aria-label="Voice help"
-                className="grid h-9 w-9 place-items-center rounded-[8px] border border-rule bg-card text-ink transition active:translate-y-px"
+                className="grid h-10 w-10 place-items-center rounded-[8px] border border-rule bg-card text-ink transition active:translate-y-px"
               >
                 <Mic size={16} />
               </button>
             </header>
           ) : null}
 
-          <main className={`flex-1 ${focus ? "" : "pb-28 lg:pb-12"}`}>
+          <main
+            className={`flex-1 ${
+              focus ? "pt-[env(safe-area-inset-top)]" : "pb-28 lg:pb-12"
+            }`}
+          >
             <Outlet />
           </main>
         </div>

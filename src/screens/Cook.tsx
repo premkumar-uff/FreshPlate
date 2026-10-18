@@ -55,7 +55,7 @@ export default function Cook() {
 
       {view === "picks" ? (
         <div className="mt-5 space-y-4">
-          <p className="max-w-xl text-[12px] leading-relaxed text-soft">
+          <p className="max-w-[30rem] text-[12px] leading-relaxed text-soft">
             Three daily suggestions, ranking groceries that may spoil soon first while balancing
             taste, health and effort.
           </p>

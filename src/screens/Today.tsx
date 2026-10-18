@@ -22,7 +22,7 @@ export default function Today() {
   const ranked = groceries
     .map((item) => ({ item, fresh: getFreshness(item) }))
     .sort((a, b) => a.fresh.daysLeft - b.fresh.daysLeft);
-  const urgent = ranked.filter(({ fresh }) => fresh.daysLeft < 3).slice(0, 4);
+  const urgent = ranked.filter(({ fresh }) => fresh.daysLeft < 3).slice(0, 3);
   const first = ranked[0];
 
   const today = new Date().toLocaleDateString([], {
@@ -41,6 +41,23 @@ export default function Today() {
           {today} · open 24h
         </span>
       </div>
+
+      <Link to="/impact" className="block">
+        <div className="flex items-center justify-between gap-4 border-b border-rule bg-card px-4 py-3">
+          <div className="flex items-baseline gap-2.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-soft">
+              Food saved · est.
+            </span>
+            <span className="tabular font-mono text-[18px] font-bold leading-none text-ink">
+              {impact.foodSavedKg} kg
+            </span>
+          </div>
+          <span className="barcode h-4 w-16 shrink-0 opacity-45" aria-hidden />
+          <span className="shrink-0 text-[11px] font-bold uppercase tracking-[0.06em] text-ink underline underline-offset-4">
+            Receipt
+          </span>
+        </div>
+      </Link>
 
       <div className="px-4 pt-5 lg:px-8 lg:pt-7">
         <div className="max-w-2xl">
@@ -120,26 +137,6 @@ export default function Today() {
             ))}
           </section>
         </div>
-
-        <Link to="/impact" className="mt-8 block">
-          <div className="receipt-edge bg-card px-5 py-4 shadow-tag">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-soft">
-                  Food saved so far · estimate
-                </p>
-                <p className="tabular mt-1 font-mono text-[26px] font-bold leading-none text-ink">
-                  {impact.foodSavedKg}
-                  <span className="ml-1 text-sm font-semibold">kg</span>
-                </p>
-              </div>
-              <span className="text-[12px] font-bold uppercase tracking-[0.06em] text-ink underline underline-offset-4">
-                View receipt
-              </span>
-            </div>
-            <div className="barcode mt-3 h-4 w-28 opacity-50" aria-hidden />
-          </div>
-        </Link>
       </div>
     </div>
   );

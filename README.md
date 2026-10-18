@@ -4,7 +4,7 @@ A mobile-first smart kitchen assistant that turns the groceries you already own 
 measurable waste prevention. Track what is at home and how fresh it is, cook from the items closest
 to spoiling, and watch the food and emissions saved add up.
 
-See `PRODUCT.md` for the product brief and `DESIGN.md` for the SHELF-EDGE design system.
+See `PRODUCT.md` for the product brief, `DESIGN.md` for the SHELF-EDGE design system, and `MINI_PROJECT_TECHNICAL_SPECIFICATION.md` for the M.Sc. Data Science Mini-Project Technical Specification Report.
 
 ## Stack
 

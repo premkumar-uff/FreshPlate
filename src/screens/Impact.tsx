@@ -74,7 +74,7 @@ export default function Impact() {
             <div className="flex flex-wrap gap-3 pt-1">
               <InkStamp on={impact.meals >= 1}>First meal</InkStamp>
               <InkStamp on={impact.foodSavedKg >= 1}>1 kg saved</InkStamp>
-              <InkStamp on={discards.length === 0} tone="red">
+              <InkStamp on={discards.length === 0 && (meals > 0 || consumed.length > 0)} tone="red">
                 Zero waste
               </InkStamp>
               <InkStamp on={impact.meals >= 5}>Five meals</InkStamp>
@@ -107,6 +107,9 @@ export default function Impact() {
                 </div>
               ))}
             </PackageCard>
+            <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-soft">
+              Neighbour names are demo data · your row is live
+            </p>
           </section>
 
           <section className="space-y-3">

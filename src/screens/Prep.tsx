@@ -44,7 +44,7 @@ export default function Prep() {
 
   return (
     <div className="min-h-full px-4 pb-12 pt-4 lg:px-8">
-      <div className="mx-auto w-full max-xl:max-w-2xl space-y-5">
+      <div className="mx-auto w-full max-w-2xl space-y-5">
         <BackHeader title="Mise en place" subtitle={recipe.name} />
 
         <PackageCard className="space-y-2.5 p-4">
@@ -105,9 +105,19 @@ export default function Prep() {
 
         <div className="pt-1">
           <ShelfStrip>Ready for the stove</ShelfStrip>
+          <p className="mt-2 text-[11px] text-soft">
+            Finish every prep step before the stove is turned on.
+          </p>
           <div className="mt-3">
-            <TagButton full onClick={() => navigate(`/cooking/${recipe.id}`)}>
-              Start cooking <ArrowRight size={16} />
+            <TagButton
+              full
+              disabled={done.length < prepSteps.length}
+              onClick={() => navigate(`/cooking/${recipe.id}`)}
+            >
+              {done.length < prepSteps.length
+                ? `${prepSteps.length - done.length} prep step${prepSteps.length - done.length === 1 ? "" : "s"} left`
+                : "Start cooking"}
+              {done.length >= prepSteps.length ? <ArrowRight size={16} /> : null}
             </TagButton>
           </div>
         </div>

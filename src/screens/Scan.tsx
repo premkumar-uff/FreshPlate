@@ -86,7 +86,7 @@ export default function Scan() {
 
   return (
     <div className="min-h-full px-4 pb-12 pt-4 lg:px-8">
-      <div className="mx-auto w-full max-w-xl space-y-5">
+      <div className="mx-auto w-full max-w-2xl space-y-5">
         <BackHeader title="Register" subtitle="Photo for fresh food, barcode for packaged" />
 
         <div className="flex gap-2">

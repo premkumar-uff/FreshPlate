@@ -159,7 +159,7 @@ export default function VoiceHelp() {
 
   return (
     <div className="min-h-full px-4 pb-12 pt-4 lg:px-8">
-      <div className="mx-auto w-full max-w-xl space-y-5">
+      <div className="mx-auto w-full max-w-2xl space-y-5">
         <BackHeader title="Voice help" subtitle="Audio only — speak and listen" />
 
         <PackageCard className="flex flex-col items-center gap-4 p-6 text-center">

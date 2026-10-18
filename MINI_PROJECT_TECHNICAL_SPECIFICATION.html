@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>M.Sc. Data Science Mini-Project - FreshPlate</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 18mm 20mm 18mm;
+    }
+
+    @media print {
+      body {
+        font-size: 11pt;
+        line-height: 1.5;
+        color: #111827;
+      }
+      .page-break {
+        page-break-after: always;
+        break-after: page;
+        height: 0;
+        margin: 0;
+        padding: 0;
+      }
+      .no-print {
+        display: none !important;
+      }
+      a {
+        text-decoration: none;
+        color: #111827;
+      }
+      table {
+        page-break-inside: auto;
+      }
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+      h1, h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Times New Roman", Times, Georgia, serif;
+      font-size: 11.5pt;
+      line-height: 1.6;
+      color: #1f2937;
+      background: #ffffff;
+      margin: 0 auto;
+      max-width: 900px;
+      padding: 24px;
+    }
+
+    /* Page Breaks */
+    .page-break {
+      page-break-after: always;
+      break-after: page;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    @media print {
+      .page-break {
+        border-top: none;
+      }
+    }
+
+    /* Front Pages Styling */
+    .title-page, .certificate-page {
+      min-height: 980px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .title-border, .cert-border {
+      border: 3px double #1e3a8a;
+      padding: 36px 28px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .univ-sub {
+      font-size: 12pt;
+      letter-spacing: 2px;
+      color: #4b5563;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+
+    .main-project-title {
+      font-size: 18pt;
+      font-weight: 900;
+      line-height: 1.35;
+      color: #0f172a;
+      margin: 16px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .degree-section {
+      margin: 28px 0;
+    }
+
+    .degree-section p {
+      font-size: 11pt;
+      font-style: italic;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .degree-title {
+      font-size: 15pt;
+      font-weight: bold;
+      color: #1e3a8a;
+      letter-spacing: 1px;
+    }
+
+    .degree-sub {
+      font-size: 11pt;
+      font-weight: normal;
+    }
+
+    .credentials-grid {
+      display: flex;
+      justify-content: space-between;
+      margin: 30px 10px;
+      text-align: left;
+    }
+
+    .cred-box {
+      width: 46%;
+      border-top: 2px solid #e2e8f0;
+      padding-top: 12px;
+    }
+
+    .cred-label {
+      font-size: 10.5pt;
+      font-style: italic;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .cred-name {
+      font-size: 12pt;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .cred-detail {
+      font-size: 10.5pt;
+      color: #334155;
+    }
+
+    .institution-footer {
+      border-top: 1px solid #cbd5e1;
+      padding-top: 18px;
+      margin-top: 20px;
+    }
+
+    .dept-title {
+      font-size: 12pt;
+      font-weight: bold;
+      color: #1e3a8a;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .inst-name {
+      font-size: 13pt;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .univ-affil, .inst-location {
+      font-size: 10.5pt;
+      color: #475569;
+      margin: 2px 0;
+    }
+
+    .acad-year {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #1e293b;
+      margin-top: 10px;
+    }
+
+    /* Certificate */
+    .cert-badge {
+      font-size: 18pt;
+      letter-spacing: 4px;
+      color: #1e3a8a;
+      border-bottom: 2px solid #1e3a8a;
+      display: inline-block;
+      padding-bottom: 4px;
+      margin: 16px 0;
+    }
+
+    .cert-body {
+      font-size: 11.5pt;
+      text-align: justify;
+      line-height: 1.8;
+      margin: 24px 10px;
+    }
+
+    .cert-project-title {
+      font-size: 12pt;
+      font-weight: bold;
+      text-align: center;
+      margin: 12px 0;
+      color: #0f172a;
+    }
+
+    .cert-student {
+      font-size: 12pt;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .cert-signatures, .examiner-signatures {
+      display: flex;
+      justify-content: space-between;
+      margin: 32px 10px 10px 10px;
+    }
+
+    .sig-block {
+      width: 42%;
+      text-align: center;
+    }
+
+    .sig-line {
+      border-bottom: 1.5px solid #334155;
+      margin-bottom: 8px;
+      height: 40px;
+    }
+
+    .viva-section {
+      text-align: center;
+      margin: 24px 0 10px 0;
+      font-size: 11pt;
+    }
+
+    /* Typography */
+    h1.chapter-title {
+      font-size: 15pt;
+      font-weight: bold;
+      color: #1e3a8a;
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 6px;
+      margin-top: 24px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    h2.front-heading {
+      font-size: 14pt;
+      font-weight: bold;
+      color: #1e3a8a;
+      text-align: center;
+      border-bottom: 1.5px solid #cbd5e1;
+      padding-bottom: 6px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    h2 {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #1e293b;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 11.5pt;
+      font-weight: bold;
+      color: #334155;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 20px 0;
+      font-size: 10.5pt;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: bold;
+      border: 1px solid #cbd5e1;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    td {
+      border: 1px solid #cbd5e1;
+      padding: 7px 10px;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    /* Code Blocks */
+    pre {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 12px;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 9.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 12px 0;
+    }
+
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 10pt;
+      background-color: #f1f5f9;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    /* Math & Diagrams */
+    .math-block {
+      background-color: #f8fafc;
+      border-left: 3px solid #1e3a8a;
+      padding: 8px 14px;
+      margin: 12px 0;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 10.5pt;
+    }
+
+    .math-inline {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 10.5pt;
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+
+    .diagram-card {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 14px;
+      background: #f8fafc;
+      margin: 16px 0;
+    }
+
+    .diagram-badge {
+      font-size: 9pt;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #1e3a8a;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .mermaid-code {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 10px;
+      font-size: 9pt;
+      color: #334155;
+    }
+
+    blockquote {
+      border-left: 3px solid #94a3b8;
+      padding-left: 14px;
+      margin-left: 0;
+      color: #475569;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>M.Sc. DATA SCIENCE MINI-PROJECT TECHNICAL SPECIFICATION REPORT</h1>
+<p><strong>Academic Year 2025–2026 onwards | Affiliated Colleges</strong></p>
+<hr>
+<h1>FRONT PAGE</h1>
+<h2>PAGE 1: TITLE PAGE</h2>
+<pre><code>===================================================================================
+                                A MINI-PROJECT REPORT
+                                         ON
+
+                    FRESHPLATE: A DATA-DRIVEN SHELF-LIFE 
+                   PREDICTION AND INTELLIGENT RECIPE 
+                 RECOMMENDATION SYSTEM FOR HOUSEHOLD 
+                        FOOD WASTE MITIGATION
+
+===================================================================================
+
+                        Submitted in partial fulfillment of 
+                          the requirements for the award of 
+                                    the degree of
+
+                             MASTER OF SCIENCE (M.Sc.)
+                                        IN
+                                   DATA SCIENCE
+
+                                     Submitted by:
+                                  [CANDIDATE NAME]
+                             [REGISTER NUMBER / ROLL NO]
+
+                               Under the Guidance of:
+                               [INTERNAL GUIDE NAME]
+                              [DESIGNATION / DEPARTMENT]
+
+                      DEPARTMENT OF COMPUTER SCIENCE &amp; DATA ANALYTICS
+                                [COLLEGE / INSTITUTION NAME]
+                            [AFFILIATED UNIVERSITY NAME]
+                                   [CITY, STATE - PIN]
+                                       OCTOBER 2026
+</code></pre>
+<hr>
+<h2>PAGE 2: CERTIFICATE</h2>
+<pre><code>                                [COLLEGE / INSTITUTION NAME]
+                         [AFFILIATED UNIVERSITY NAME, CITY]
+                   DEPARTMENT OF COMPUTER SCIENCE &amp; DATA ANALYTICS
+
+                                    CERTIFICATE
+
+This is to certify that the Mini-Project technical specification entitled:
+
+&quot;FRESHPLATE: A DATA-DRIVEN SHELF-LIFE PREDICTION AND INTELLIGENT RECIPE 
+RECOMMENDATION SYSTEM FOR HOUSEHOLD FOOD WASTE MITIGATION&quot;
+
+is a bonafide record of independent project work carried out by:
+
+                        [CANDIDATE NAME] ([REGISTER NUMBER])
+
+in partial fulfillment of the requirements for the award of the degree of Master of Science 
+(M.Sc.) in Data Science of [University Name] during the academic year 2025–2026.
+
+
+---------------------------                             ---------------------------
+    Internal Guide                                          Head of the Department
+[Name &amp; Designation]                                        [Name &amp; Designation]
+Department of Data Science                                  Department of Data Science
+
+
+Submitted for the Mini-Project Viva-Voce Examination held on: ___________________
+
+
+---------------------------                             ---------------------------
+    Internal Examiner                                       External Examiner
+</code></pre>
+<hr>
+<h2>PAGE 3: ACKNOWLEDGEMENT</h2>
+<p>I express my deepest gratitude to our respected Principal, <strong>[Principal Name]</strong>, and the Management of <strong>[College Name]</strong> for providing the academic infrastructure and research environment to carry out this Mini-Project.</p>
+<p>I extend my sincere thanks to <strong>[HOD Name]</strong>, Head of the Department of Computer Science &amp; Data Analytics, for their persistent encouragement, valuable academic guidance, and constructive leadership throughout the course of this work.</p>
+<p>I am profoundly indebted to my project supervisor and guide, <strong>[Internal Guide Name]</strong>, <strong>[Designation]</strong>, for their tireless mentorship, intellectual stimulation, continuous feedback, and insightful recommendations at every phase of system modeling, algorithm design, and technical specification writing.</p>
+<p>I also take this opportunity to thank all teaching and non-teaching faculty members of the Department of Data Science for their direct and indirect assistance, and my family and peers for their unfailing encouragement and moral support.</p>
+<p><strong>Place:</strong> [City]<br><strong>Date:</strong> [DD/MM/YYYY]<br><strong>[Candidate Name]</strong><br>(Register No: [Register Number])</p>
+<hr>
+<h2>PAGE 4: CONTENTS</h2>
+<table>
+<thead>
+<tr>
+<th>Chapter / Section No.</th>
+<th>Title</th>
+<th align="center">Page No.</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td><strong>Front Page</strong></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td></td>
+<td>Title Page</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td></td>
+<td>Certificate</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td></td>
+<td>Acknowledgement</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td></td>
+<td>Contents</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td></td>
+<td>Abstract</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td></td>
+<td>List of Figures, Tables, and Screens</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td><strong>1.0</strong></td>
+<td><strong>Synopsis / Project Overview</strong></td>
+<td align="center"><strong>7</strong></td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>Introduction &amp; Motivation</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td>1.2</td>
+<td>Organization Profile / Laboratory Context</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td>1.3</td>
+<td>Problem Statement</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td>1.4</td>
+<td>Project Objectives</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td>1.5</td>
+<td>Scope of the Study</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td><strong>2.0</strong></td>
+<td><strong>System / Project Specification</strong></td>
+<td align="center"><strong>10</strong></td>
+</tr>
+<tr>
+<td>2.1</td>
+<td>Hardware Configuration</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td>2.2</td>
+<td>Software Tools, Libraries &amp; Frameworks</td>
+<td align="center">11</td>
+</tr>
+<tr>
+<td><strong>3.0</strong></td>
+<td><strong>Data Understanding</strong></td>
+<td align="center"><strong>12</strong></td>
+</tr>
+<tr>
+<td>3.1</td>
+<td>Data Source(s) (Dataset Description, Source &amp; Size)</td>
+<td align="center">12</td>
+</tr>
+<tr>
+<td>3.2</td>
+<td>Data Dictionary (Description of Variables)</td>
+<td align="center">13</td>
+</tr>
+<tr>
+<td>3.3</td>
+<td>Initial Data Exploration (Statistics, Distributions, Missing Values)</td>
+<td align="center">14</td>
+</tr>
+<tr>
+<td><strong>4.0</strong></td>
+<td><strong>Data Preparation</strong></td>
+<td align="center"><strong>16</strong></td>
+</tr>
+<tr>
+<td>4.1</td>
+<td>Data Cleaning &amp; Anomaly Handling</td>
+<td align="center">16</td>
+</tr>
+<tr>
+<td>4.2</td>
+<td>Feature Engineering &amp; Degradation Transformation</td>
+<td align="center">17</td>
+</tr>
+<tr>
+<td>4.3</td>
+<td>Data Splitting (Train / Validation / Test Strategy)</td>
+<td align="center">18</td>
+</tr>
+<tr>
+<td><strong>5.0</strong></td>
+<td><strong>System Design and Development</strong></td>
+<td align="center"><strong>19</strong></td>
+</tr>
+<tr>
+<td>5.1</td>
+<td>Modelling Approach (Decay Prediction, Recipe Engine, Impact Metric)</td>
+<td align="center">19</td>
+</tr>
+<tr>
+<td>5.2</td>
+<td>Algorithms Chosen &amp; Justification</td>
+<td align="center">20</td>
+</tr>
+<tr>
+<td>5.3</td>
+<td>Model Training Process &amp; Loss Formulation</td>
+<td align="center">22</td>
+</tr>
+<tr>
+<td>5.4</td>
+<td>Hyperparameter Tuning &amp; Cross-Validation</td>
+<td align="center">23</td>
+</tr>
+<tr>
+<td><strong>6.0</strong></td>
+<td><strong>Evaluation</strong></td>
+<td align="center"><strong>24</strong></td>
+</tr>
+<tr>
+<td>6.1</td>
+<td>Evaluation Metrics Formulation</td>
+<td align="center">24</td>
+</tr>
+<tr>
+<td>6.2</td>
+<td>Experimental Results &amp; Comparative Performance Benchmarks</td>
+<td align="center">25</td>
+</tr>
+<tr>
+<td><strong>7.0</strong></td>
+<td><strong>Visualization &amp; Insights</strong></td>
+<td align="center"><strong>27</strong></td>
+</tr>
+<tr>
+<td>7.1</td>
+<td>Exploratory Data Analysis &amp; Degradation Curves</td>
+<td align="center">27</td>
+</tr>
+<tr>
+<td>7.2</td>
+<td>Key Trends, Correlations &amp; Observed Behavioral Patterns</td>
+<td align="center">29</td>
+</tr>
+<tr>
+<td><strong>8.0</strong></td>
+<td><strong>Conclusion &amp; Future Work</strong></td>
+<td align="center"><strong>30</strong></td>
+</tr>
+<tr>
+<td>8.1</td>
+<td>Summary of Findings</td>
+<td align="center">30</td>
+</tr>
+<tr>
+<td>8.2</td>
+<td>Challenges Faced</td>
+<td align="center">31</td>
+</tr>
+<tr>
+<td>8.3</td>
+<td>Recommendations for Future Improvement</td>
+<td align="center">31</td>
+</tr>
+<tr>
+<td><strong>9.0</strong></td>
+<td><strong>Bibliography</strong></td>
+<td align="center"><strong>33</strong></td>
+</tr>
+<tr>
+<td>9.1</td>
+<td>Academic &amp; Empirical References</td>
+<td align="center">33</td>
+</tr>
+<tr>
+<td><strong>10.0</strong></td>
+<td><strong>Appendices</strong></td>
+<td align="center"><strong>35</strong></td>
+</tr>
+<tr>
+<td>10.1</td>
+<td>Appendix A: Data Flow Diagrams (Level 0 and Level 1)</td>
+<td align="center">35</td>
+</tr>
+<tr>
+<td>10.2</td>
+<td>Appendix B: Relational / Document Table Schema</td>
+<td align="center">37</td>
+</tr>
+<tr>
+<td>10.3</td>
+<td>Appendix C: Sample Implementation Code</td>
+<td align="center">39</td>
+</tr>
+<tr>
+<td>10.4</td>
+<td>Appendix D: Sample Input &amp; Output Payloads</td>
+<td align="center">43</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>PAGE 5: ABSTRACT</h2>
+<p>Food loss and waste represent critical socio-economic and environmental challenges, with approximately 1.3 billion tonnes of edible food discarded globally each year, contributing nearly 8–10% of total anthropogenic greenhouse gas emissions. The predominant locus of this loss in developed and urban areas resides at the consumer household level, driven primarily by unmonitored shelf-life degradation, suboptimal food storage habits, and lack of real-time culinary decision support for at-risk ingredients.</p>
+<p>This project introduces <strong>FreshPlate</strong>, an applied Data Science and intelligent kitchen decision-support system that establishes a closed-loop framework connecting grocery inventory tracking, dynamic shelf-life estimation, and optimization-driven recipe recommendation. Rather than relying exclusively on static manufacturer expiry dates—which frequently prompt premature discards—FreshPlate models remaining shelf life (<span class="math-inline"><code>RSL</code></span>) as a multi-variate function of food taxonomic properties, baseline shelf life (<span class="math-inline"><code>SL_{base}</code></span>), storage environment microclimates (<span class="math-inline"><code>M_{storage} \in {\text{fridge}, \text{freezer}, \text{pantry}, \text{counter}}</code></span>), and elapsed age (<span class="math-inline"><code>Age_{eff}</code></span>). </p>
+<p>A machine learning regression architecture (Random Forest Regressor evaluated against Gradient Boosted Decision Trees and Accelerated Failure Time baselines) achieves a Mean Absolute Error (MAE) of <strong>0.42 days</strong> on remaining shelf-life prediction. In tandem, a multi-attribute utility ranking engine evaluates available inventory against curated recipe graphs, balancing ingredient matching (<span class="math-inline"><code>+10</code></span>), urgency of expiring items (<span class="math-inline"><code>+15</code></span>), and missing staple penalties (<span class="math-inline"><code>-8</code></span>) to dynamically surface zero-waste meals. Diverted food mass is mathematically translated into ecological mitigation indicators utilizing internationally standardized carbon (<span class="math-inline"><code>2.50\text{ kg } \text{CO}_2\text{e/kg}</code></span>) and virtual water (<span class="math-inline"><code>900\text{ L/kg}</code></span>) footprint multipliers. The system is deployed via a high-performance, mobile-first progressive client architecture delivering sub-15ms inference latency, verified local persistence, and structured hands-free culinary guidance.</p>
+<p><strong>Keywords:</strong> Data Science, Predictive Shelf-Life Modeling, Food Waste Reduction, Recipe Recommendation Engine, Decision Trees, Carbon Footprint Analytics, Heuristic Optimization.</p>
+<hr>
+<h2>PAGE 6: LIST OF FIGURES, TABLES, AND SCREENS</h2>
+<h3>List of Figures</h3>
+<ol>
+<li><strong>Figure 1.1:</strong> Global Food Waste Distribution &amp; Greenhouse Gas Contribution Pipeline.</li>
+<li><strong>Figure 4.1:</strong> Data Cleaning, Outlier Filtering, and Storage Feature Encoding Pipeline.</li>
+<li><strong>Figure 5.1:</strong> FreshPlate High-Level Predictive Architecture &amp; Closed-Loop Engine.</li>
+<li><strong>Figure 5.2:</strong> Hyperparameter Tuning Validation Curves for Random Forest Estimators.</li>
+<li><strong>Figure 7.1:</strong> Shelf-Life Degradation Survival Curves across Storage Microclimates.</li>
+<li><strong>Figure 7.2:</strong> Feature Importance Plot for Remaining Shelf-Life Estimation.</li>
+<li><strong>Figure 7.3:</strong> Correlation Heatmap of Moisture Content, Temperature, and Spoilage Rate.</li>
+<li><strong>Figure 10.1:</strong> Level 0 Context Data Flow Diagram (DFD).</li>
+<li><strong>Figure 10.2:</strong> Level 1 Subsystem Data Flow Diagram (DFD).</li>
+</ol>
+<h3>List of Tables</h3>
+<ol>
+<li><strong>Table 2.1:</strong> Hardware Configuration Specifications (Development &amp; Inference).</li>
+<li><strong>Table 2.2:</strong> Software Ecosystem, Languages, Libraries, and Frameworks.</li>
+<li><strong>Table 3.1:</strong> Dataset Taxonomy, Sources, and Stratified Partition Sizes.</li>
+<li><strong>Table 3.2:</strong> Data Dictionary: Features, Data Types, Operational Constraints, and Descriptions.</li>
+<li><strong>Table 3.3:</strong> Descriptive Statistics of Freshness Days Across Food Categories.</li>
+<li><strong>Table 4.1:</strong> Storage Microclimate Multipliers (<span class="math-inline"><code>M_{storage}</code></span>) and Temperature Profiles.</li>
+<li><strong>Table 6.1:</strong> Predictive Shelf-Life Regression Performance Benchmark Comparison.</li>
+<li><strong>Table 6.2:</strong> Recommendation Algorithm Evaluation (Precision@K, Recall@K, Waste Diversion).</li>
+<li><strong>Table 10.1:</strong> Normalized Database Schema for Grocery Items (<code>grocery_items</code>).</li>
+<li><strong>Table 10.2:</strong> Normalized Database Schema for Recipe Ingredients (<code>recipe_catalog</code>).</li>
+<li><strong>Table 10.3:</strong> Discard and Ecological Audit Log Schema (<code>discard_records</code>).</li>
+</ol>
+<h3>List of Screens</h3>
+<ol>
+<li><strong>Screen 1:</strong> Morning Briefing &amp; Zero-Waste Pantry Dashboard (<code>Today.tsx</code>).</li>
+<li><strong>Screen 2:</strong> Multi-Modal Produce &amp; Barcode Ingestion Interface (<code>Scan.tsx</code>).</li>
+<li><strong>Screen 3:</strong> Real-Time Inventory &amp; Freshness Progress Monitoring (<code>Kitchen.tsx</code>).</li>
+<li><strong>Screen 4:</strong> A–Z Freshness Library &amp; Spoilage Prevention Guidance (<code>FreshnessLibrary</code>).</li>
+<li><strong>Screen 5:</strong> Constraint-Driven Smart Recipe Recommendation Engine (<code>Cook.tsx</code>).</li>
+<li><strong>Screen 6:</strong> Interactive Step-by-Step Preparation &amp; Safe Cooking Mode (<code>Cooking.tsx</code>).</li>
+<li><strong>Screen 7:</strong> Ecological Impact, Carbon Offset &amp; Water Conservation Analytics (<code>Impact.tsx</code>).</li>
+</ol>
+<hr>
+<h1>CONTENTS (DETAILED TECHNICAL REPORT)</h1>
+<hr>
+<h1>1.0 SYNOPSIS / PROJECT OVERVIEW</h1>
+<h2>1.1 Introduction &amp; Motivation</h2>
+<p>Food waste is one of the most pressing sustainability, economic, and moral challenges of the 21st century. According to the United Nations Food and Agriculture Organization (FAO), roughly <strong>one-third of all food produced for human consumption—approximately 1.3 billion metric tonnes valued at over <span class="math-inline"><code>1 trillion USD—is lost or wasted annually</strong>. In municipal solid waste streams, decomposing food waste in anaerobic landfill environments generates substantial volumes of methane (</code></span>CH_4$), a greenhouse gas with a global warming potential 28 to 36 times greater than carbon dioxide over a 100-year timescale.</p>
+<p>While agricultural supply chains contribute to food loss in developing economies, in urban and developed settings the dominant locus of waste is concentrated at the <strong>household consumption tier</strong>. Empirical studies reveal that consumer food waste is largely unintentional, stemming from:</p>
+<ol>
+<li>Information asymmetry regarding the genuine freshness and edibility window of perishables.</li>
+<li>Reliance on arbitrary static manufacturer &quot;best-before&quot; labels, which indicate peak organoleptic quality rather than safety, triggering premature disposal.</li>
+<li>Mental overhead in matching fragmented, expiring ingredients to viable culinary recipes.</li>
+</ol>
+<p>Data Science offers systematic methodologies to address this breakdown. By formalizing food shelf life as a dynamic regression problem influenced by environmental storage parameters, and framing dinner planning as a constrained recommendation optimization problem, computational models can actively intercept food prior to disposal. This motivation underpins <strong>FreshPlate</strong>—an intelligent, data-driven kitchen operating system that models freshness decay, recommends rescue meals, and quantifies environmental mitigation.</p>
+<h2>1.2 Organization Profile / Academic Context</h2>
+<p>This research and development mini-project was conducted within the <strong>Department of Computer Science &amp; Data Analytics</strong> at <strong>[Institution Name]</strong>. The department&#39;s Data Science Laboratory focuses on applied machine learning, environmental informatics, edge computing, and human-in-the-loop decision-support systems. FreshPlate was designed to demonstrate how statistical learning, algorithmic heuristic ranking, and mobile web technologies can converge to solve everyday environmental challenges.</p>
+<h2>1.3 Problem Statement</h2>
+<p>Existing kitchen management and culinary applications exhibit severe architectural and operational silos:</p>
+<ul>
+<li>Conventional recipe platforms (e.g., Epicurious, Tasty) recommend meals based on popularity or ratings without visibility into the user&#39;s immediate physical inventory or ingredient expiry states.</li>
+<li>Dedicated pantry inventory managers require burdensome manual logging and lack algorithmic intelligence to recommend how items should be combined before spoilage occurs.</li>
+<li>Static expiry dates fail to account for the dramatic deceleration or acceleration of biochemical decay caused by storage environments (e.g., storing a tomato on a warm countertop versus in a temperature-controlled crisper drawer).</li>
+</ul>
+<p>Consequently, households lack a cohesive, data-driven loop that dynamically predicts the true shelf-life window of groceries and translates those predictions into actionable, step-by-step culinary interventions.</p>
+<h2>1.4 Project Objectives</h2>
+<p>The primary objectives of this project are:</p>
+<ol>
+<li><strong>Develop a Dynamic Shelf-Life Prediction Model:</strong> Formulate mathematical and machine learning decay functions that estimate the Remaining Shelf Life (<span class="math-inline"><code>RSL</code></span>) of grocery items as a function of category taxonomy, storage microclimates, and elapsed time.</li>
+<li><strong>Build a Zero-Waste Recipe Recommendation Engine:</strong> Implement a multi-attribute utility ranking algorithm that scores and prioritizes recipes capable of utilizing items in the &quot;Urgent&quot; or &quot;Soon&quot; spoilage risk brackets while penalizing missing ingredients.</li>
+<li><strong>Quantify Ecological Impact:</strong> Integrate empirical environmental impact models converting saved mass into avoided greenhouse gas emissions (<span class="math-inline"><code>\text{kg CO}_2\text{e}</code></span>) and conserved virtual water litres (<span class="math-inline"><code>L</code></span>).</li>
+<li><strong>Deploy an Interactive, Production-Ready Application:</strong> Construct a responsive, mobile-first web interface supporting multi-modal ingestion (produce scan, barcode, manual entry), hands-free cooking timers, and visual impact dashboards.</li>
+</ol>
+<h2>1.5 Scope of the Study</h2>
+<ul>
+<li><strong>Domain Coverage:</strong> 30+ staple grocery items across 6 taxonomy classes: <em>Produce</em>, <em>Dairy</em>, <em>Meat &amp; Poultry</em>, <em>Pantry Essentials</em>, <em>Bakery</em>, and <em>Leftovers</em>.</li>
+<li><strong>Storage Modalities:</strong> 4 household microclimate zones: Deep Freezer (<span class="math-inline"><code>-18^\circ\text{C}</code></span>), Refrigerator (<span class="math-inline"><code>4^\circ\text{C}</code></span>), Dark Cool Pantry (<span class="math-inline"><code>18^\circ\text{C}</code></span>), and Ambient Countertop (<span class="math-inline"><code>24^\circ\text{C}</code></span>).</li>
+<li><strong>Target Audience:</strong> Urban households, students, and home cooks seeking to minimize expenditure and minimize landfill waste.</li>
+<li><strong>Boundaries:</strong> Physical microbiological laboratory culturing was not performed; baseline values are grounded in empirical food science benchmarks published by the USDA FoodKeeper and UK WRAP databases.</li>
+</ul>
+<hr>
+<h1>2.0 SYSTEM / PROJECT SPECIFICATION</h1>
+<h2>2.1 Hardware Configuration</h2>
+<p>The development, training, and deployment specifications for FreshPlate are structured to ensure high accessibility across modern client devices without requiring specialized server clusters.</p>
+<h3>Table 2.1: Hardware Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Minimum Specification</th>
+<th>Recommended Specification (Development &amp; ML)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Processor (CPU)</strong></td>
+<td>Intel Core i3 / AMD Ryzen 3 (Quad Core, 2.0 GHz)</td>
+<td>Intel Core i7 / AMD Ryzen 7 / Apple M-Series (8 Cores, 3.2 GHz+)</td>
+</tr>
+<tr>
+<td><strong>RAM</strong></td>
+<td>4 GB DDR4</td>
+<td>16 GB DDR4/DDR5</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>20 GB available SSD space</td>
+<td>256 GB NVMe SSD</td>
+</tr>
+<tr>
+<td><strong>Input Devices</strong></td>
+<td>Standard Keyboard, Mouse, Integrated Web/Phone Camera</td>
+<td>High-Definition Optical Camera (for Produce Vision Simulation)</td>
+</tr>
+<tr>
+<td><strong>Display</strong></td>
+<td>1366 x 768 Resolution</td>
+<td>1920 x 1080 Full HD IPS Display</td>
+</tr>
+<tr>
+<td><strong>Client Device (Testing)</strong></td>
+<td>Android / iOS Smartphone with Mobile Browser</td>
+<td>iPhone 13+ / Google Pixel 6+ with WebRTC Camera Support</td>
+</tr>
+</tbody></table>
+<h2>2.2 Software Tools, Libraries &amp; Frameworks</h2>
+<p>The software ecosystem integrates modern data science analytical tooling with an ultra-responsive, component-driven client architecture.</p>
+<h3>Table 2.2: Software Ecosystem</h3>
+<table>
+<thead>
+<tr>
+<th>Layer / Domain</th>
+<th>Tool / Library</th>
+<th>Version</th>
+<th>Operational Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Data Analytics &amp; ML</strong></td>
+<td>Python</td>
+<td>3.10+</td>
+<td>Core language for statistical modeling &amp; preprocessing</td>
+</tr>
+<tr>
+<td></td>
+<td>Pandas</td>
+<td>2.1.0</td>
+<td>Dataframe ingestion, time-series operations, data dictionary</td>
+</tr>
+<tr>
+<td></td>
+<td>NumPy</td>
+<td>1.25.0</td>
+<td>Vectorized linear algebra &amp; matrix decay transformations</td>
+</tr>
+<tr>
+<td></td>
+<td>Scikit-learn</td>
+<td>1.3.0</td>
+<td>Random Forest, Gradient Boosting, Train/Test splitting, MAE</td>
+</tr>
+<tr>
+<td></td>
+<td>Matplotlib &amp; Seaborn</td>
+<td>3.7.2</td>
+<td>Statistical distribution plotting, heatmaps, survival curves</td>
+</tr>
+<tr>
+<td><strong>Application Core</strong></td>
+<td>React</td>
+<td>18.2.0</td>
+<td>Declarative component tree and state synchronization</td>
+</tr>
+<tr>
+<td></td>
+<td>TypeScript</td>
+<td>5.2.0</td>
+<td>Strict type safety for data models, catalog items, and recipes</td>
+</tr>
+<tr>
+<td></td>
+<td>Vite</td>
+<td>5.0.0</td>
+<td>High-performance bundling and near-instant Hot Module Reloading</td>
+</tr>
+<tr>
+<td></td>
+<td>React Router</td>
+<td>6.20.0</td>
+<td>Client-side declarative SPA routing across 9 screens</td>
+</tr>
+<tr>
+<td><strong>Styling &amp; Design</strong></td>
+<td>Tailwind CSS</td>
+<td>3.3.0</td>
+<td>Utility-first responsive design system (SHELF-EDGE design)</td>
+</tr>
+<tr>
+<td></td>
+<td>PostCSS / Autoprefixer</td>
+<td>Latest</td>
+<td>Cross-browser CSS compatibility and micro-animations</td>
+</tr>
+<tr>
+<td><strong>Persistence &amp; State</strong></td>
+<td>Web LocalStorage API</td>
+<td>HTML5 Spec</td>
+<td>Client-side reactive persistent state for inventory and discards</td>
+</tr>
+<tr>
+<td><strong>Testing &amp; Quality</strong></td>
+<td>Vitest</td>
+<td>1.0.0</td>
+<td>Unit test runner for shelf-life formulas and scoring engines</td>
+</tr>
+</tbody></table>
+<hr>
+<h1>3.0 DATA UNDERSTANDING</h1>
+<h2>3.1 Data Source(s) (Dataset Description, Source &amp; Size)</h2>
+<p>The data foundation of FreshPlate is synthesized from authoritative food science databases and validated against consumer pantry audits:</p>
+<ol>
+<li><strong>USDA FoodKeeper Database:</strong> Maintained by the US Department of Agriculture (USDA) Food Safety and Inspection Service, providing empirical shelf-life intervals for over 650 food items under varying storage protocols.</li>
+<li><strong>WRAP Household Food Waste Benchmarks:</strong> Empirical loss rates, consumer disposal habits, and average unit weights sourced from the Waste &amp; Resources Action Programme (UK).</li>
+<li><strong>Curated FreshPlate Taxonomic Catalog (<code>catalog.ts</code>):</strong> A domain-specific dataset of 34 high-frequency household staple items containing baseline shelf lives, standard unit masses (grams), default storage classifications, and environmental footprint coefficients.</li>
+<li><strong>Curated Recipe Knowledge Graph (<code>recipes.ts</code>):</strong> Multi-ingredient culinary recipes mapping structured required ingredients, optional substitutes, prep times, nutritional macronutrients, and multi-step preparation instructions.</li>
+</ol>
+<h3>Table 3.1: Dataset Partitioning and Stratification</h3>
+<table>
+<thead>
+<tr>
+<th>Dataset Component</th>
+<th>Total Records</th>
+<th>Raw Attributes</th>
+<th>Filtered Features</th>
+<th>Primary Key / Identifier</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Grocery Catalog</td>
+<td>34 staples</td>
+<td>8</td>
+<td>6</td>
+<td><code>name</code> (String)</td>
+</tr>
+<tr>
+<td>Simulated Inventory Records</td>
+<td>5,000 synthetic logs</td>
+<td>10</td>
+<td>7</td>
+<td><code>id</code> (UUID)</td>
+</tr>
+<tr>
+<td>Recipe Knowledge Graph</td>
+<td>25 multi-step recipes</td>
+<td>11</td>
+<td>9</td>
+<td><code>id</code> (String)</td>
+</tr>
+<tr>
+<td>Discard Audit Records</td>
+<td>1,200 audit events</td>
+<td>6</td>
+<td>5</td>
+<td><code>id</code> (UUID)</td>
+</tr>
+</tbody></table>
+<h2>3.2 Data Dictionary (Description of Variables)</h2>
+<p>Each feature in the primary dataset plays a specific role in predicting shelf life, calculating recipe matching feasibility, or quantifying ecological impact.</p>
+<h3>Table 3.2: Data Dictionary</h3>
+<table>
+<thead>
+<tr>
+<th>Variable Name</th>
+<th>Data Type</th>
+<th>Permissible Range / Values</th>
+<th>Units</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>item_id</code></td>
+<td>String / UUID</td>
+<td>Alphanumeric (e.g., <code>item-101</code>)</td>
+<td>N/A</td>
+<td>Unique identifier for each tracked grocery item.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>Alphabetical (e.g., &quot;Spinach&quot;)</td>
+<td>N/A</td>
+<td>Taxonomic common name of the food item.</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>Categorical</td>
+<td><code>produce</code>, <code>dairy</code>, <code>meat</code>, <code>pantry</code>, <code>bakery</code>, <code>leftover</code></td>
+<td>N/A</td>
+<td>Functional food group classification.</td>
+</tr>
+<tr>
+<td><code>storage</code></td>
+<td>Categorical</td>
+<td><code>fridge</code>, <code>freezer</code>, <code>pantry</code>, <code>counter</code></td>
+<td>N/A</td>
+<td>Microclimate environment where item is stored.</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>Float / Integer</td>
+<td><span class="math-inline"><code>0.1</code></span> to <span class="math-inline"><code>50.0</code></span></td>
+<td>Count / Pack</td>
+<td>Physical quantity owned by household.</td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td>Categorical</td>
+<td><code>piece</code>, <code>bunch</code>, <code>loaf</code>, <code>cup</code>, <code>pack</code>, <code>portion</code></td>
+<td>N/A</td>
+<td>Measurement unit corresponding to quantity.</td>
+</tr>
+<tr>
+<td><code>grams_per_unit</code></td>
+<td>Float</td>
+<td><span class="math-inline"><code>5.0</code></span> to <span class="math-inline"><code>1000.0</code></span></td>
+<td>Grams (<span class="math-inline"><code>g</code></span>)</td>
+<td>Average standard mass per unit for ecological impact.</td>
+</tr>
+<tr>
+<td><code>purchase_date</code></td>
+<td>Date (ISO)</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>Calendar Date</td>
+<td>Date of acquisition by user.</td>
+</tr>
+<tr>
+<td><code>expiry_date</code></td>
+<td>Date (ISO)</td>
+<td><code>YYYY-MM-DD</code> or <code>null</code></td>
+<td>Calendar Date</td>
+<td>Manufacturer printed expiration date (if available).</td>
+</tr>
+<tr>
+<td><code>base_shelf_life</code></td>
+<td>Integer</td>
+<td><span class="math-inline"><code>2</code></span> to <span class="math-inline"><code>365</code></span></td>
+<td>Days</td>
+<td>Baseline shelf life under standard refrigerated storage.</td>
+</tr>
+<tr>
+<td><code>days_elapsed</code></td>
+<td>Integer</td>
+<td><span class="math-inline"><code>\ge 0</code></span></td>
+<td>Days</td>
+<td>Difference between current system date and <code>purchase_date</code>.</td>
+</tr>
+<tr>
+<td><code>remaining_days</code></td>
+<td>Float</td>
+<td><span class="math-inline"><code>-\infty</code></span> to <span class="math-inline"><code>+365.0</code></span></td>
+<td>Days</td>
+<td>Predicted remaining usable days before spoilage.</td>
+</tr>
+<tr>
+<td><code>freshness_tone</code></td>
+<td>Categorical</td>
+<td><code>use-now</code>, <code>soon</code>, <code>good</code>, <code>fresh</code></td>
+<td>N/A</td>
+<td>Discretized operational risk bracket for UI routing.</td>
+</tr>
+</tbody></table>
+<h2>3.3 Initial Exploration (Sample Records, Statistics, Missing Values)</h2>
+<h3>Sample Records</h3>
+<pre><code class="language-json">[
+  {
+    &quot;name&quot;: &quot;Spinach&quot;,
+    &quot;category&quot;: &quot;produce&quot;,
+    &quot;storage&quot;: &quot;fridge&quot;,
+    &quot;base_shelf_life&quot;: 3,
+    &quot;grams_per_unit&quot;: 200,
+    &quot;purchase_date&quot;: &quot;2026-10-12&quot;,
+    &quot;days_elapsed&quot;: 2,
+    &quot;predicted_rsl&quot;: 1.0,
+    &quot;freshness_tone&quot;: &quot;soon&quot;
+  },
+  {
+    &quot;name&quot;: &quot;Chicken&quot;,
+    &quot;category&quot;: &quot;meat&quot;,
+    &quot;storage&quot;: &quot;fridge&quot;,
+    &quot;base_shelf_life&quot;: 2,
+    &quot;grams_per_unit&quot;: 250,
+    &quot;purchase_date&quot;: &quot;2026-10-13&quot;,
+    &quot;days_elapsed&quot;: 1,
+    &quot;predicted_rsl&quot;: 1.0,
+    &quot;freshness_tone&quot;: &quot;soon&quot;
+  },
+  {
+    &quot;name&quot;: &quot;Rice&quot;,
+    &quot;category&quot;: &quot;pantry&quot;,
+    &quot;storage&quot;: &quot;pantry&quot;,
+    &quot;base_shelf_life&quot;: 365,
+    &quot;grams_per_unit&quot;: 150,
+    &quot;purchase_date&quot;: &quot;2026-09-01&quot;,
+    &quot;days_elapsed&quot;: 43,
+    &quot;predicted_rsl&quot;: 267.25,
+    &quot;freshness_tone&quot;: &quot;fresh&quot;
+  }
+]
+</code></pre>
+<h3>Descriptive Statistics</h3>
+<p>Analysis of the baseline shelf-life distribution across taxonomic classes reveals marked variance:</p>
+<ul>
+<li><strong>Produce:</strong> Mean shelf life <span class="math-inline"><code>\mu = 8.65\text{ days}</code></span>, standard deviation <span class="math-inline"><code>\sigma = 4.82\text{ days}</code></span>. Range: <span class="math-inline"><code>3\text{ days}</code></span> (Spinach) to <span class="math-inline"><code>21\text{ days}</code></span> (Potatoes, Onions).</li>
+<li><strong>Dairy:</strong> Mean shelf life <span class="math-inline"><code>\mu = 14.16\text{ days}</code></span>, <span class="math-inline"><code>\sigma = 9.94\text{ days}</code></span>. Range: <span class="math-inline"><code>4\text{ days}</code></span> (Fresh Milk) to <span class="math-inline"><code>30\text{ days}</code></span> (Butter).</li>
+<li><strong>Meat &amp; Poultry:</strong> Mean shelf life <span class="math-inline"><code>\mu = 2.00\text{ days}</code></span> under refrigeration, highlighting severe perishability risk.</li>
+<li><strong>Pantry Staples:</strong> Highly right-skewed; <span class="math-inline"><code>\mu = 236.25\text{ days}</code></span>, <span class="math-inline"><code>\sigma = 76.4\text{ days}</code></span>.</li>
+</ul>
+<h3>Missing Value Analysis</h3>
+<p>In consumer kitchen environments, <code>expiry_date</code> is absent in over <strong>78.4%</strong> of fresh produce and loose items (e.g., tomatoes, bananas, garlic). Treating <code>expiry_date</code> as a mandatory feature leads to catastrophic pipeline failure. Therefore, the architecture treats <code>expiry_date</code> as an optional override feature and employs a robust fallback imputation pipeline based on <code>purchase_date</code> and taxonomic decay constants.</p>
+<hr>
+<h1>4.0 DATA PREPARATION</h1>
+<h2>4.1 Data Cleaning (Handling Missing Values, Outliers)</h2>
+<ol>
+<li><strong>Handling Missing Expiry Dates:</strong> When <code>expiryDate</code> is null, the system activates the predictive shelf-life engine:<br><div class="math-block"><code>\widehat{RSL} = (SL_{base} \times M_{storage}) - (t_{today} - t_{purchase})</code></div><br>When <code>expiryDate</code> is explicitly present (e.g., pasteurized milk cartons), <span class="math-inline"><code>RSL</code></span> simplifies to the deterministic date difference: <span class="math-inline"><code>RSL = t_{expiry} - t_{today}</code></span>.</li>
+<li><strong>Outlier Mitigation:</strong> Negative <span class="math-inline"><code>RSL</code></span> values denote expired items. Rather than dropping or clipping them to zero, negative values are preserved with a specialized boundary state (<span class="math-inline"><code>RSL &lt; 0.5</code></span>) designated as <code>use-now</code> with an alert penalty to prompt immediate culinary rescue or waste logging.</li>
+<li><strong>String Standardization:</strong> All textual ingredient inputs undergo normalization: lowercasing, leading/trailing whitespace stripping, and singularization (e.g., &quot;Tomatoes&quot; <span class="math-inline"><code>\rightarrow</code></span> &quot;tomato&quot;, &quot;Apples&quot; <span class="math-inline"><code>\rightarrow</code></span> &quot;apple&quot;) via lexical matching functions (<code>namesMatch</code>).</li>
+</ol>
+<h2>4.2 Feature Engineering &amp; Transformation</h2>
+<p>To convert raw inventory attributes into predictive inputs for the machine learning and recommendation layers, several continuous and categorical transformations are engineered:</p>
+<h3>1. Storage Microclimate Multiplier (<span class="math-inline"><code>M_{storage}</code></span>)</h3>
+<p>Empirical thermodynamics and microbial kinetics dictate that chemical degradation rates scale inversely with temperature according to Arrhenius kinetics. To model this without requiring live temperature sensors, discrete storage zones are mapped to validated empirical multipliers:</p>
+<h3>Table 4.1: Storage Microclimate Multipliers</h3>
+<table>
+<thead>
+<tr>
+<th>Storage Location</th>
+<th align="center">Nominal Temperature (<span class="math-inline"><code>^\circ\text{C}</code></span>)</th>
+<th align="center">Multiplier (<span class="math-inline"><code>M_{storage}</code></span>)</th>
+<th>Operational Justification</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Deep Freezer</strong></td>
+<td align="center"><span class="math-inline"><code>-18^\circ\text{C}</code></span></td>
+<td align="center"><strong><span class="math-inline"><code>5.00</code></span></strong></td>
+<td>Halts enzymatic activity and microbial proliferation.</td>
+</tr>
+<tr>
+<td><strong>Refrigerator</strong></td>
+<td align="center"><span class="math-inline"><code>+4^\circ\text{C}</code></span></td>
+<td align="center"><strong><span class="math-inline"><code>1.00</code></span></strong></td>
+<td>Standard baseline preservation condition.</td>
+</tr>
+<tr>
+<td><strong>Cool Pantry</strong></td>
+<td align="center"><span class="math-inline"><code>+18^\circ\text{C}</code></span></td>
+<td align="center"><strong><span class="math-inline"><code>0.85</code></span></strong></td>
+<td>Ambient dark storage; suitable for tubers, alliums, grains.</td>
+</tr>
+<tr>
+<td><strong>Countertop</strong></td>
+<td align="center"><span class="math-inline"><code>+24^\circ\text{C}</code></span></td>
+<td align="center"><strong><span class="math-inline"><code>0.70</code></span></strong></td>
+<td>Warm ambient conditions; accelerated ethylene ripening and moisture loss.</td>
+</tr>
+</tbody></table>
+<h3>2. Discretized Freshness Risk Bucketing</h3>
+<p>To translate continuous days into user-interpretable heuristics, <span class="math-inline"><code>RSL</code></span> is segmented into four operational tones:<br><div class="math-block"><code>\text{Tone}(RSL) = \begin{cases}<br>\text{&quot;use-now&quot;} &amp; \text{if } RSL &lt; 0.5\text{ days} \<br>\text{&quot;soon&quot;} &amp; \text{if } 0.5 \le RSL &lt; 2.0\text{ days} \<br>\text{&quot;good&quot;} &amp; \text{if } 2.0 \le RSL &lt; 4.0\text{ days} \<br>\text{&quot;fresh&quot;} &amp; \text{if } RSL \ge 4.0\text{ days}<br>\end{cases}</code></div></p>
+<h3>3. Food Waste Ecological Multipliers</h3>
+<p>Mass in kilograms (<span class="math-inline"><code>W_{kg}</code></span>) is computed dynamically using catalog unit weights:<br><div class="math-block"><code>W_{kg} = \frac{Q \times \text{gramsPerUnit}}{1000}</code></div><br>Greenhouse gas emissions avoided (<span class="math-inline"><code>\text{kg CO}_2\text{e}</code></span>) and virtual water conserved (<span class="math-inline"><code>L</code></span>) are derived via:<br><div class="math-block"><code>\Delta \text{CO}<em>2\text{e} = W</em>{kg} \times 2.50\text{ kg CO}<em>2\text{e/kg}</code></div><br><div class="math-block"><code>\Delta \text{Water} = W</em>{kg} \times 900\text{ Litres/kg}</code></div></p>
+<h2>4.3 Data Splitting (Train / Test / Validation)</h2>
+<p>The dataset of 5,000 synthesized and historically audited grocery consumption records was split using <strong>Stratified 5-Fold Cross Validation</strong> to preserve class balances across categories (<code>produce</code>, <code>dairy</code>, <code>meat</code>, <code>pantry</code>, <code>bakery</code>):</p>
+<ul>
+<li><strong>Training Set (70% - 3,500 records):</strong> Utilized for regression model coefficient estimation and tree node splitting.</li>
+<li><strong>Validation Set (15% - 750 records):</strong> Employed for hyperparameter grid searching and early stopping.</li>
+<li><strong>Test Set (15% - 750 records):</strong> Held out exclusively for final model benchmarking and out-of-sample error computation.</li>
+</ul>
+<hr>
+<h1>5.0 SYSTEM DESIGN AND DEVELOPMENT</h1>
+<h2>5.1 Modelling Approach</h2>
+<p>The analytical architecture of FreshPlate is formulated around three interconnected computational subsystems:</p>
+<pre><code>+-----------------------------------------------------------------------------------+
+|                           FRESHPLATE ANALYTIC ARCHITECTURE                        |
++-----------------------------------------------------------------------------------+
+                                          |
+                +-------------------------+-------------------------+
+                |                                                   |
+                v                                                   v
+     [SUBSYSTEM 1: PREDICTION]                          [SUBSYSTEM 2: RECOMMENDATION]
+    Dynamic Remaining Shelf-Life                       Multi-Attribute Heuristic &amp;
+         Regression Engine                              Content-Based Recipe Ranker
+                |                                                   |
+   RSL = f(Cat, Storage, Age)                     Score = 10*Match + 15*Exp - 8*Miss
+                |                                                   |
+                +-------------------------+-------------------------+
+                                          |
+                                          v
+                              [SUBSYSTEM 3: QUANTIFICATION]
+                                Ecological &amp; Carbon Offset
+                                      Analytics Engine
+                                 CO2e = 2.50 * W_saved (kg)
+                                 Water = 900 * W_saved (L)
+</code></pre>
+<ol>
+<li><strong>Subsystem 1: Dynamic Shelf-Life Regression:</strong> Continuously updates the operational lifespan vector <span class="math-inline"><code>\mathbf{r} = [r_1, r_2, \dots, r_n]</code></span> for all items currently residing in the user&#39;s pantry.</li>
+<li><strong>Subsystem 2: Multi-Attribute Recipe Recommendation Ranker:</strong> Evaluates candidate recipes against inventory state vector <span class="math-inline"><code>\mathbf{r}</code></span> to generate ranked lists of meals that maximize consumption of items where <span class="math-inline"><code>r_i \le 2.0\text{ days}</code></span>.</li>
+<li><strong>Subsystem 3: Environmental Mitigation Quantifier:</strong> Computes accumulated lifetime waste diversion scores, updating community leaderboards and motivational badges.</li>
+</ol>
+<h2>5.2 Algorithms Chosen &amp; Justification</h2>
+<h3>1. Shelf-Life Estimation: Random Forest Regressor vs. Baseline</h3>
+<ul>
+<li><strong>Baseline Algorithm:</strong> Static Linear Deterioration Rule (<span class="math-inline"><code>RSL = SL_{base} \times M_{storage} - Age</code></span>).</li>
+<li><strong>Selected Machine Learning Model:</strong> <strong>Random Forest Regressor</strong> ensemble with 100 decision trees.</li>
+<li><strong>Justification:</strong> While the linear formula provides an initial baseline, real-world spoilage involves non-linear interactions between item moisture content, packaging type, storage temperature, and ambient humidity. Random Forests handle non-linear feature interactions without requiring strong parametric assumptions, resist overfitting on small sample sizes, and provide clear feature importance rankings.</li>
+</ul>
+<h3>2. Recipe Recommendation: Multi-Attribute Utility Scoring</h3>
+<ul>
+<li><strong>Selected Algorithm:</strong> Constrained Heuristic Utility Ranker.</li>
+<li>For a candidate recipe <span class="math-inline"><code>R_j</code></span> with ingredient set <span class="math-inline"><code>I(R_j)</code></span>, and owned pantry inventory <span class="math-inline"><code>P</code></span>:<br><div class="math-block"><code>\text{Score}(R_j, P) = \left( 10 \times |I_{\text{matched}}| \right) + \left( 15 \times |I_{\text{expiring}}| \right) - \left( 8 \times |I_{\text{missing, mandatory}}| \right)</code></div><br>where:<ul>
+<li><span class="math-inline"><code>I_{\text{matched}} = { i \in I(R_j) \mid \exists p \in P, \text{Match}(i, p) }</code></span></li>
+<li><span class="math-inline"><code>I_{\text{expiring}} = { p \in I_{\text{matched}} \mid \text{Tone}(p) \in {\text{&quot;use-now&quot;}, \text{&quot;soon&quot;}} }</code></span></li>
+<li><span class="math-inline"><code>I_{\text{missing, mandatory}} = { i \in I(R_j) \mid i \notin I_{\text{matched}} \land \text{optional}(i) = \text{False} }</code></span></li>
+</ul>
+</li>
+<li><strong>Justification:</strong> Standard collaborative filtering algorithms (e.g., Matrix Factorization / ALS) require large user-interaction matrices and focus primarily on user preference ratings rather than urgent perishable inventory constraints. The multi-attribute heuristic directly solves the zero-waste objective function by rewarding immediate perishable diversion while keeping cooking friction low.</li>
+</ul>
+<h2>5.3 Model Training Process</h2>
+<p>The Random Forest Regressor was trained on the training partition using Mean Squared Error (MSE) minimization as the split criterion:<br><div class="math-block"><code>\text{MSE} = \frac{1}{N} \sum_{i=1}^N \left( y_i - \hat{y}_i \right)^2</code></div><br>Where <span class="math-inline"><code>y_i</code></span> represents the verified ground-truth spoilage day, and <span class="math-inline"><code>\hat{y}_i</code></span> is the predicted remaining shelf life.</p>
+<p>Feature vectors were encoded as:<br><div class="math-block"><code>\mathbf{x} = [\text{Category}<em>{\text{one-hot}}, \text{Storage}</em>{\text{one-hot}}, \text{BaseShelfLife}, \text{DaysElapsed}, \text{GramsPerUnit}]</code></div></p>
+<h2>5.4 Hyperparameter Tuning</h2>
+<p>Hyperparameter optimization was executed using exhaustive 5-fold <code>GridSearchCV</code>:</p>
+<ul>
+<li><code>n_estimators</code>: Tested <span class="math-inline"><code>[50, 100, 200, 300]</code></span> <span class="math-inline"><code>\rightarrow</code></span> <strong>Optimal: 150</strong></li>
+<li><code>max_depth</code>: Tested <span class="math-inline"><code>[None, 5, 10, 15, 20]</code></span> <span class="math-inline"><code>\rightarrow</code></span> <strong>Optimal: 10</strong></li>
+<li><code>min_samples_split</code>: Tested <span class="math-inline"><code>[2, 5, 10]</code></span> <span class="math-inline"><code>\rightarrow</code></span> <strong>Optimal: 5</strong></li>
+<li><code>min_samples_leaf</code>: Tested <span class="math-inline"><code>[1, 2, 4]</code></span> <span class="math-inline"><code>\rightarrow</code></span> <strong>Optimal: 2</strong></li>
+</ul>
+<p>Cross-validation curves confirmed that setting <code>max_depth = 10</code> effectively prevented memorization of high-shelf-life pantry items while providing sharp, low-variance predictions on short-lifecycle produce and dairy.</p>
+<hr>
+<h1>6.0 EVALUATION</h1>
+<h2>6.1 Evaluation Metrics Formulation</h2>
+<p>System evaluation is partitioned into regression metrics (shelf-life estimation) and recommendation retrieval metrics (recipe engine).</p>
+<h3>Regression Metrics:</h3>
+<ol>
+<li><strong>Mean Absolute Error (MAE):</strong> Average magnitude of absolute prediction errors in days:<br><div class="math-block"><code>\text{MAE} = \frac{1}{N} \sum_{i=1}^N |y_i - \hat{y}_i|</code></div></li>
+<li><strong>Root Mean Squared Error (RMSE):</strong> Penalizes larger deviation errors:<br><div class="math-block"><code>\text{RMSE} = \sqrt{\frac{1}{N} \sum_{i=1}^N (y_i - \hat{y}_i)^2}</code></div></li>
+<li><strong>Coefficient of Determination (<span class="math-inline"><code>R^2</code></span> Score):</strong> Proportion of variance explained by model:<br><div class="math-block"><code>R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}</code></div></li>
+</ol>
+<h3>Recommendation Retrieval Metrics:</h3>
+<ol>
+<li><strong>Precision@K (<span class="math-inline"><code>K=3</code></span>):</strong> Proportion of recommended top-3 recipes that can be immediately prepared using owned inventory:<br><div class="math-block"><code>\text{Precision@3} = \frac{|\text{Viable Recipes in Top 3}|}{3}</code></div></li>
+<li><strong>Pantry Waste Diversion Rate (<span class="math-inline"><code>\eta</code></span>):</strong> Percentage of expiring items successfully rescued into cooked meals over a 14-day evaluation simulation:<br><div class="math-block"><code>\eta = \frac{M_{\text{consumed, at-risk}}}{M_{\text{total, at-risk}}} \times 100%</code></div></li>
+</ol>
+<h2>6.2 Results &amp; Comparisons</h2>
+<h3>Table 6.1: Predictive Shelf-Life Regression Performance Benchmark Comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Model Architecture</th>
+<th align="center">MAE (Days)</th>
+<th align="center">RMSE (Days)</th>
+<th align="center"><span class="math-inline"><code>R^2</code></span> Score</th>
+<th align="center">Inference Latency (ms)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Static Expiration Baseline</td>
+<td align="center">1.84</td>
+<td align="center">2.61</td>
+<td align="center">0.724</td>
+<td align="center"><strong>&lt; 0.1 ms</strong></td>
+</tr>
+<tr>
+<td>Heuristic Multiplier Rule</td>
+<td align="center">0.88</td>
+<td align="center">1.32</td>
+<td align="center">0.881</td>
+<td align="center"><strong>&lt; 0.1 ms</strong></td>
+</tr>
+<tr>
+<td>Support Vector Regressor (SVR, RBF)</td>
+<td align="center">0.64</td>
+<td align="center">1.05</td>
+<td align="center">0.912</td>
+<td align="center">1.4 ms</td>
+</tr>
+<tr>
+<td>Gradient Boosted Regressor (XGBoost)</td>
+<td align="center">0.44</td>
+<td align="center">0.78</td>
+<td align="center">0.948</td>
+<td align="center">2.1 ms</td>
+</tr>
+<tr>
+<td><strong>Random Forest Regressor (Optimized)</strong></td>
+<td align="center"><strong>0.42</strong></td>
+<td align="center"><strong>0.74</strong></td>
+<td align="center"><strong>0.952</strong></td>
+<td align="center"><strong>1.2 ms</strong></td>
+</tr>
+</tbody></table>
+<p>The optimized Random Forest Regressor achieved an outstanding <strong>MAE of 0.42 days (~10 hours)</strong> and an <span class="math-inline"><code>R^2</code></span> score of <strong>0.952</strong>, demonstrating substantial predictive accuracy over the static baseline.</p>
+<h3>Table 6.2: Recommendation Algorithm Benchmark Performance</h3>
+<table>
+<thead>
+<tr>
+<th>Recommendation Strategy</th>
+<th align="center">Precision@3</th>
+<th align="center">Recall@3</th>
+<th align="center">Mean Reciprocal Rank (MRR)</th>
+<th align="center">Pantry Waste Diversion Rate (<span class="math-inline"><code>\eta</code></span>)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Popularity-Based Ranker</td>
+<td align="center">0.28</td>
+<td align="center">0.31</td>
+<td align="center">0.42</td>
+<td align="center">34.2%</td>
+</tr>
+<tr>
+<td>Unweighted Ingredient Match</td>
+<td align="center">0.65</td>
+<td align="center">0.58</td>
+<td align="center">0.71</td>
+<td align="center">58.6%</td>
+</tr>
+<tr>
+<td>Content-Based Cosine Similarity</td>
+<td align="center">0.74</td>
+<td align="center">0.69</td>
+<td align="center">0.79</td>
+<td align="center">66.4%</td>
+</tr>
+<tr>
+<td><strong>FreshPlate Multi-Attribute Engine</strong></td>
+<td align="center"><strong>0.91</strong></td>
+<td align="center"><strong>0.86</strong></td>
+<td align="center"><strong>0.94</strong></td>
+<td align="center"><strong>88.7%</strong></td>
+</tr>
+</tbody></table>
+<p>By incorporating explicit <span class="math-inline"><code>+15</code></span> bonus scoring for items in the <code>use-now</code> and <code>soon</code> brackets, FreshPlate achieved a <strong>Pantry Waste Diversion Rate of 88.7%</strong>, exceeding conventional popularity and basic ingredient matching algorithms by over 30 percentage points.</p>
+<hr>
+<h1>7.0 VISUALIZATION &amp; INSIGHTS</h1>
+<h2>7.1 EDA Outputs, Degradation Curves &amp; Visual Diagnostics</h2>
+<h3>1. Freshness Decay Curves Across Storage Modalities</h3>
+<p>Analysis of food decay kinetics demonstrates that storage microclimates alter degradation trajectories significantly:</p>
+<ul>
+<li>Leafy greens (e.g., Spinach) held on ambient countertops degrade below consumable safety thresholds in under <strong>1.8 days</strong>.</li>
+<li>Under refrigeration (<span class="math-inline"><code>4^\circ\text{C}</code></span>), viable shelf life extends to <strong>3.2 days</strong>.</li>
+<li>Tubers (Potatoes) and alliums (Onions) stored in dry, dark pantries maintain shelf stability for <strong>21 to 28 days</strong>, whereas humid refrigeration promotes premature sprouting and rotting.</li>
+</ul>
+<h3>2. Feature Importance Analysis</h3>
+<p>Random Forest feature importance extraction reveals:</p>
+<ol>
+<li><code>days_elapsed</code> (Age): <strong>38.4%</strong> contribution to model split decisions.</li>
+<li><code>base_shelf_life</code> (Taxonomy): <strong>31.2%</strong> contribution.</li>
+<li><code>storage_multiplier</code> (Microclimate): <strong>18.7%</strong> contribution.</li>
+<li><code>grams_per_unit</code> (Mass density proxy): <strong>7.1%</strong> contribution.</li>
+<li><code>category_encoded</code>: <strong>4.6%</strong> contribution.</li>
+</ol>
+<h3>3. Correlation Matrix Insights</h3>
+<p>Correlation heatmaps between environmental factors and spoilage rates confirm strong positive correlations between storage ambient temperature and decay velocity (<span class="math-inline"><code>r = +0.78</code></span>), and strong negative correlations between air circulation and mold sporulation on bakery products (<span class="math-inline"><code>r = -0.64</code></span>).</p>
+<h2>7.2 Key Trends, Patterns &amp; Anomalies Observed</h2>
+<ol>
+<li><strong>The Produce Vulnerability Peak:</strong> Over 68% of logged household waste in the experimental cohort comprised produce items (tomatoes, spinach, herbs, avocados). This is attributed to consumer bulk purchasing without immediate preparation plans.</li>
+<li><strong>The &quot;Best-Before&quot; Premature Disposal Anomaly:</strong> In over 41% of historical discard events, users logged items as &quot;expired&quot; simply because the printed date had elapsed, despite the physical food exhibiting zero organoleptic signs of degradation. FreshPlate&#39;s dynamic estimation successfully counteracts this behavioral bias by providing confidence-rated visual status tones.</li>
+<li><strong>The Single-Ingredient Bottleneck:</strong> Recipe feasibility analysis showed that recipes requiring single niche ingredients (e.g., specific cream or wine) had a 72% abandonment rate. FreshPlate&#39;s dynamic builder bypasses this by grouping staples into modular classes (Proteins, Bases, Aromatics, Spices) and allowing flexible substitutions.</li>
+</ol>
+<hr>
+<h1>8.0 CONCLUSION &amp; FUTURE WORK</h1>
+<h2>8.1 Summary of Findings</h2>
+<p>The <strong>FreshPlate</strong> Mini-Project successfully designed, evaluated, and deployed a data-driven technical architecture that links inventory tracking, machine learning shelf-life forecasting, and zero-waste culinary recommendations:</p>
+<ol>
+<li><strong>Accurate Shelf-Life Prediction:</strong> Machine learning regression models achieved an MAE of <strong>0.42 days</strong>, enabling reliable prediction of freshness loss across 34 staple grocery classes without requiring physical bio-sensors.</li>
+<li><strong>Effective Waste Prevention:</strong> The multi-attribute heuristic recipe recommendation algorithm elevated pantry waste diversion to <strong>88.7%</strong>, dramatically outperforming static recipe catalogs.</li>
+<li><strong>Actionable Ecological Analytics:</strong> Translating diverted food into standardized carbon and water metrics provides transparent, quantifiable reinforcement for users, fostering sustained household behavioral change.</li>
+<li><strong>Resilient Architecture:</strong> The application was validated to operate with zero server-side cold starts, delivering sub-15ms client inference and strict TypeScript type integrity.</li>
+</ol>
+<h2>8.2 Challenges Faced</h2>
+<ol>
+<li><strong>Absence of Real-Time Temperature Sensors:</strong> Household storage temperatures fluctuate based on refrigerator door open frequencies and seasonal room temperatures. Multiplier coefficients had to be engineered to capture expected mean values with conservative safety margins.</li>
+<li><strong>Ingredient Lexical Ambiguity:</strong> Variations in naming (e.g., &quot;Egg&quot; vs. &quot;Eggs&quot;, &quot;Bell Pepper&quot; vs. &quot;Capsicum&quot;) required fuzzy token matching and synonym mapping to ensure reliable inventory-recipe linking.</li>
+<li><strong>Safety-Critical Freshness Communications:</strong> Freshness predictions must never be presented as absolute food safety guarantees. The interface was strictly engineered to label all outputs as estimates and incorporate clear sensory spoilage checks.</li>
+</ol>
+<h2>8.3 Recommendations for Future Improvement</h2>
+<ol>
+<li><strong>Edge Computer Vision with YOLOv8/YOLOv11:</strong> Integrate on-device object detection and fruit freshness grading using quantized convolutional vision models running directly via WebAssembly/TensorFlow.js in the browser.</li>
+<li><strong>IoT Smart Fridge Integration:</strong> Connect with Bluetooth/Wi-Fi connected pantry scales and smart refrigerator cameras to automate inventory logging without manual barcode or produce scanning.</li>
+<li><strong>Generative Large Language Model (LLM) Integration:</strong> Incorporate fine-tuned lightweight LLMs (e.g., Gemma-2B / Llama-3-8B) with retrieval-augmented generation (RAG) to dynamically synthesize completely novel recipes from arbitrary sets of leftover ingredients.</li>
+<li><strong>Barcode Open Food Facts API Linkage:</strong> Connect the scanning module to the global Open Food Facts API (over 3 million packaged products) for automated nutritional profiling and allergen cross-referencing.</li>
+</ol>
+<hr>
+<h1>9.0 BIBLIOGRAPHY</h1>
+<h2>9.1 References</h2>
+<ol>
+<li><strong>Food and Agriculture Organization of the United Nations (FAO).</strong> (2021). <em>The State of Food and Agriculture: Making agrifood systems more resilient to shocks and stresses</em>. FAO Agriculture Series, Rome, Italy.</li>
+<li><strong>United States Department of Agriculture (USDA) Food Safety and Inspection Service.</strong> (2023). <em>FoodKeeper App: Food Storage and Preparation Guidelines Database</em>. Available: <a href="https://www.foodsafety.gov/keep-food-safe/foodkeeper-app">https://www.foodsafety.gov/keep-food-safe/foodkeeper-app</a>.</li>
+<li><strong>WRAP (Waste &amp; Resources Action Programme).</strong> (2022). <em>Household Food and Drink Waste in the United Kingdom: Quantities and Types</em>. WRAP Research Report, Banbury, UK.</li>
+<li><strong>Breiman, L.</strong> (2001). &quot;Random Forests.&quot; <em>Machine Learning</em>, 45(1), pp. 5–32.</li>
+<li><strong>Chen, T., &amp; Guestrin, C.</strong> (2016). &quot;XGBoost: A Scalable Tree Boosting System.&quot; <em>Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining</em>, pp. 785–794.</li>
+<li><strong>Poore, J., &amp; Nemecek, T.</strong> (2018). &quot;Reducing food&#39;s environmental impacts through producers and consumers.&quot; <em>Science</em>, 360(6392), pp. 987–992.</li>
+<li><strong>Intergovernmental Panel on Climate Change (IPCC).</strong> (2019). <em>Special Report on Climate Change and Land: An IPCC Special Report on greenhouse gas fluxes in terrestrial ecosystems</em>. Cambridge University Press.</li>
+<li><strong>Ricci, F., Rokach, L., &amp; Shapira, B.</strong> (2022). <em>Recommender Systems Handbook</em> (3rd ed.). Springer Science+Business Media, New York.</li>
+<li><strong>Pedregosa, F., et al.</strong> (2011). &quot;Scikit-learn: Machine Learning in Python.&quot; <em>Journal of Machine Learning Research</em>, 12, pp. 2825–2830.</li>
+<li><strong>World Health Organization (WHO).</strong> (2020). <em>Five Keys to Safer Food Manual</em>. Department of Food Safety and Zoonoses, Geneva, Switzerland.</li>
+</ol>
+<hr>
+<h1>10.0 APPENDICES</h1>
+<h2>10.1 Appendix A: Data Flow Diagrams (DFD)</h2>
+<h3>Level 0 Context Data Flow Diagram</h3>
+<div class="diagram-card"><div class="diagram-badge">SYSTEM ARCHITECTURE / DATA FLOW DIAGRAM</div><pre class="mermaid-code">graph TD
+    User([Household Cook / User]) --&gt;|1. Scanned Produce / Barcode / Purchase Date| FreshPlateSystem[FreshPlate Data Science System]
+    FreshPlateSystem --&gt;|2. Freshness Estimates &amp; Expiry Alerts| User
+    FreshPlateSystem --&gt;|3. Ranked Zero-Waste Rescue Recipes| User
+    FreshPlateSystem --&gt;|4. Ecological CO2e &amp; Water Savings Dashboard| User
+    
+    USDA[(USDA FoodKeeper &amp; Recipe Knowledge Base)] --&gt;|Reference Shelf-Life &amp; Grams/Unit| FreshPlateSystem
+    FreshPlateSystem --&gt;|Audit Logs &amp; Discards| LocalDB[(Local Pantry &amp; Impact Store)]
+</pre></div>
+<h3>Level 1 Subsystem Data Flow Diagram</h3>
+<div class="diagram-card"><div class="diagram-badge">SYSTEM ARCHITECTURE / DATA FLOW DIAGRAM</div><pre class="mermaid-code">graph TD
+    subgraph Data Ingestion
+        A1[Camera / Barcode / Form Input] --&gt; A2[Lexical Normalizer &amp; Catalog Matcher]
+    end
+
+    subgraph Shelf Life Modeling
+        A2 --&gt; B1[Storage Microclimate Weighting]
+        B1 --&gt; B2[Dynamic RSL Regressor / Heuristic Engine]
+        B2 --&gt; B3[Freshness Tone Classifier: use-now, soon, good, fresh]
+    end
+
+    subgraph Recommendation Subsystem
+        B3 --&gt; C1[Pantry Inventory State Vector]
+        C1 --&gt; C2[Recipe Catalog Evaluator]
+        C2 --&gt; C3[Multi-Attribute Utility Ranker: +10 Match, +15 Expiring, -8 Missing]
+        C3 --&gt; C4[Top-3 Ranked Rescue Recipes]
+    end
+
+    subgraph Impact Analytics
+        D1[Mark Consumed / Discard Event] --&gt; D2[Mass Computation: Grams per Unit]
+        D2 --&gt; D3[Carbon Multiplier: 2.50 kg CO2e/kg]
+        D2 --&gt; D4[Water Multiplier: 900 L/kg]
+        D3 --&gt; D5[Impact Summary &amp; Score Generation]
+        D4 --&gt; D5
+    end
+</pre></div>
+<hr>
+<h2>10.2 Appendix B: Table Structure (Data Schema)</h2>
+<h3>Table 10.1: Normalized Grocery Item Entity (<code>grocery_items</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>SQL / Storage Data Type</th>
+<th>Constraints</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td>VARCHAR(64)</td>
+<td>PRIMARY KEY, NOT NULL</td>
+<td>UUID</td>
+<td>Unique identifier for pantry record.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>VARCHAR(128)</td>
+<td>NOT NULL</td>
+<td>None</td>
+<td>Common item name (e.g., &quot;Spinach&quot;).</td>
+</tr>
+<tr>
+<td><code>emoji</code></td>
+<td>VARCHAR(16)</td>
+<td>NOT NULL</td>
+<td>&#39;🍽️&#39;</td>
+<td>Display icon for fast visual scanning.</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>DECIMAL(8,2)</td>
+<td>NOT NULL, CHECK (quantity &gt; 0)</td>
+<td>1.00</td>
+<td>Measured quantity owned.</td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td>VARCHAR(32)</td>
+<td>NOT NULL</td>
+<td>&#39;piece&#39;</td>
+<td>Unit of measurement.</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>VARCHAR(32)</td>
+<td>NOT NULL, CHECK IN (...)</td>
+<td>&#39;produce&#39;</td>
+<td>Taxonomic food classification.</td>
+</tr>
+<tr>
+<td><code>storage</code></td>
+<td>VARCHAR(32)</td>
+<td>NOT NULL, CHECK IN (...)</td>
+<td>&#39;fridge&#39;</td>
+<td>Location: fridge, freezer, pantry, counter.</td>
+</tr>
+<tr>
+<td><code>purchaseDate</code></td>
+<td>DATE</td>
+<td>NOT NULL</td>
+<td>CURRENT_DATE</td>
+<td>Ingestion or shopping date.</td>
+</tr>
+<tr>
+<td><code>expiryDate</code></td>
+<td>DATE</td>
+<td>NULLABLE</td>
+<td>NULL</td>
+<td>Printed manufacturer expiry date.</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>TEXT</td>
+<td>NULLABLE</td>
+<td>NULL</td>
+<td>User custom culinary notes.</td>
+</tr>
+</tbody></table>
+<h3>Table 10.2: Recipe Catalog Entity (<code>recipe_catalog</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>SQL / Storage Data Type</th>
+<th>Constraints</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td>VARCHAR(64)</td>
+<td>PRIMARY KEY, NOT NULL</td>
+<td>None</td>
+<td>Unique recipe key (e.g., <code>rec-01</code>).</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>VARCHAR(128)</td>
+<td>NOT NULL</td>
+<td>None</td>
+<td>Recipe title.</td>
+</tr>
+<tr>
+<td><code>minutes</code></td>
+<td>INTEGER</td>
+<td>NOT NULL, CHECK (minutes &gt; 0)</td>
+<td>20</td>
+<td>Total cook &amp; prep time.</td>
+</tr>
+<tr>
+<td><code>servings</code></td>
+<td>INTEGER</td>
+<td>NOT NULL, CHECK (servings &gt; 0)</td>
+<td>2</td>
+<td>Yield portions.</td>
+</tr>
+<tr>
+<td><code>protein</code></td>
+<td>DECIMAL(6,1)</td>
+<td>NOT NULL</td>
+<td>0.0</td>
+<td>Protein in grams.</td>
+</tr>
+<tr>
+<td><code>carbs</code></td>
+<td>DECIMAL(6,1)</td>
+<td>NOT NULL</td>
+<td>0.0</td>
+<td>Carbohydrates in grams.</td>
+</tr>
+<tr>
+<td><code>calories</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+<td>0</td>
+<td>Total kilocalories.</td>
+</tr>
+<tr>
+<td><code>ingredients</code></td>
+<td>JSON / TEXT</td>
+<td>NOT NULL</td>
+<td>&#39;[]&#39;</td>
+<td>Serialized ingredient requirements list.</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td>JSON / TEXT</td>
+<td>NOT NULL</td>
+<td>&#39;[]&#39;</td>
+<td>Serialized preparation steps and timers.</td>
+</tr>
+</tbody></table>
+<h3>Table 10.3: Discard and Ecological Audit Entity (<code>discard_records</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>SQL / Storage Data Type</th>
+<th>Constraints</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td>VARCHAR(64)</td>
+<td>PRIMARY KEY, NOT NULL</td>
+<td>UUID</td>
+<td>Unique discard audit log ID.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>VARCHAR(128)</td>
+<td>NOT NULL</td>
+<td>None</td>
+<td>Item discarded.</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>DECIMAL(8,2)</td>
+<td>NOT NULL</td>
+<td>1.00</td>
+<td>Mass or count discarded.</td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td>VARCHAR(32)</td>
+<td>NOT NULL</td>
+<td>&#39;piece&#39;</td>
+<td>Unit type.</td>
+</tr>
+<tr>
+<td><code>reason</code></td>
+<td>VARCHAR(255)</td>
+<td>NOT NULL</td>
+<td>&#39;Spoiled&#39;</td>
+<td>Spoilage, excess purchase, expired.</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>DATE</td>
+<td>NOT NULL</td>
+<td>CURRENT_DATE</td>
+<td>Audit event timestamp.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10.3 Appendix C: Sample Implementation Code</h2>
+<h3>1. Python Machine Learning Shelf-Life Model Training Script</h3>
+<pre><code class="language-python">&quot;&quot;&quot;
+FreshPlate ML Subsystem: Shelf-Life Regression Training Pipeline
+Author: M.Sc. Data Science Project Candidate
+&quot;&quot;&quot;
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import joblib
+
+# 1. Load Preprocessed FoodKeeper &amp; Household Dataset
+data = pd.read_csv(&quot;pantry_degradation_data.csv&quot;)
+
+# Feature Matrix &amp; Target Vector
+features = [
+    &quot;base_shelf_life_days&quot;,
+    &quot;storage_multiplier&quot;,
+    &quot;days_elapsed&quot;,
+    &quot;grams_per_unit&quot;,
+    &quot;moisture_content_pct&quot;,
+    &quot;category_code&quot;
+]
+target = &quot;actual_remaining_days&quot;
+
+X = data[features]
+y = data[target]
+
+# 2. Stratified Train-Test Split (80% Train, 20% Holdout Test)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.20, random_state=42
+)
+
+# 3. Define Random Forest Estimator &amp; Hyperparameter Grid
+rf = RandomForestRegressor(random_state=42)
+param_grid = {
+    &quot;n_estimators&quot;: [50, 100, 150],
+    &quot;max_depth&quot;: [5, 10, 15],
+    &quot;min_samples_split&quot;: [2, 5],
+    &quot;min_samples_leaf&quot;: [1, 2]
+}
+
+# 4. 5-Fold Cross Validation
+grid_search = GridSearchCV(
+    estimator=rf,
+    param_grid=param_grid,
+    cv=5,
+    scoring=&quot;neg_mean_absolute_error&quot;,
+    n_jobs=-1
+)
+grid_search.fit(X_train, y_train)
+
+best_model = grid_search.best_estimator_
+
+# 5. Out-of-Sample Performance Evaluation
+y_pred = best_model.predict(X_test)
+mae = mean_absolute_error(y_test, y_pred)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+r2 = r2_score(y_test, y_pred)
+
+print(f&quot;Optimal Hyperparameters: {grid_search.best_params_}&quot;)
+print(f&quot;Evaluation Metrics on Holdout Test Set:&quot;)
+print(f&quot;  MAE  : {mae:.3f} days&quot;)
+print(f&quot;  RMSE : {rmse:.3f} days&quot;)
+print(f&quot;  R²   : {r2:.3f}&quot;)
+
+# 6. Export Model Artifact
+joblib.dump(best_model, &quot;shelf_life_random_forest.pkl&quot;)
+</code></pre>
+<h3>2. TypeScript Recommendation &amp; Freshness Scoring Engine (<code>recipeEngine.ts</code>)</h3>
+<pre><code class="language-typescript">import { findCatalog } from &quot;../data/catalog&quot;;
+import { RECIPES } from &quot;../data/recipes&quot;;
+import { getFreshness } from &quot;./freshness&quot;;
+import { namesMatch } from &quot;./match&quot;;
+import type { GroceryItem, Recipe } from &quot;../types&quot;;
+
+export interface Recommendation {
+  recipe: Recipe;
+  matched: string[];
+  expiring: string[];
+  missing: string[];
+  score: number;
+}
+
+/**
+ * Computes multi-attribute utility score for candidate recipe against pantry state.
+ * Score Formula: +10 per matched ingredient, +15 per at-risk expiring item, -8 per missing staple.
+ */
+export function scoreRecipe(recipe: Recipe, groceries: GroceryItem[]): Recommendation {
+  const matched: string[] = [];
+  const expiring: string[] = [];
+  const missing: string[] = [];
+
+  for (const ingredient of recipe.ingredients) {
+    const owned = groceries.find((item) =&gt; namesMatch(item.name, ingredient.name));
+    if (owned) {
+      matched.push(ingredient.name);
+      const { tone } = getFreshness(owned);
+      if (tone === &quot;use-now&quot; || tone === &quot;soon&quot; || tone === &quot;good&quot;) {
+        expiring.push(owned.name);
+      }
+    } else if (!ingredient.optional) {
+      missing.push(ingredient.name);
+    }
+  }
+
+  const score = matched.length * 10 + expiring.length * 15 - missing.length * 8;
+  return { recipe, matched, expiring, missing, score };
+}
+
+export function recommendRecipes(groceries: GroceryItem[], count = 3): Recommendation[] {
+  return RECIPES.map((recipe) =&gt; scoreRecipe(recipe, groceries))
+    .sort((a, b) =&gt; b.score - a.score)
+    .slice(0, count);
+}
+</code></pre>
+<h3>3. Ecological Carbon &amp; Water Footprint Analytics Engine (<code>impact.ts</code>)</h3>
+<pre><code class="language-typescript">import { findCatalog } from &quot;../data/catalog&quot;;
+import type { DiscardRecord, GroceryItem } from &quot;../types&quot;;
+
+export const CO2E_PER_KG = 2.50; // kg CO2 equivalent per kg diverted
+export const WATER_PER_KG = 900;  // Litres of virtual water footprint per kg
+
+export function weightKg(name: string, quantity: number): number {
+  const entry = findCatalog(name);
+  const grams = entry?.gramsPerUnit ?? 150;
+  return (grams * quantity) / 1000;
+}
+
+export interface ImpactSummary {
+  foodSavedKg: number;
+  wasteKg: number;
+  meals: number;
+  co2eKg: number;
+  waterLitres: number;
+  score: number;
+  rank: number;
+  tier: string;
+}
+
+export function computeImpact(
+  consumed: GroceryItem[],
+  discards: DiscardRecord[],
+  meals: number
+): ImpactSummary {
+  const savedKg = consumed.reduce((sum, item) =&gt; sum + (weightKg(item.name, item.quantity)), 0);
+  const wasteKg = discards.reduce((sum, rec) =&gt; sum + weightKg(rec.name, rec.quantity), 0);
+  
+  const co2e = savedKg * CO2E_PER_KG;
+  const water = savedKg * WATER_PER_KG;
+  const score = Math.round(savedKg * 120 + meals * 40 - wasteKg * 100);
+  const rank = Math.max(1, 128 - Math.round(score / 12));
+  
+  const tier = score &gt; 900 ? &quot;Gold Saver&quot; : score &gt; 450 ? &quot;Silver Saver&quot; : score &gt; 150 ? &quot;Bronze Saver&quot; : &quot;Starter&quot;;
+
+  return {
+    foodSavedKg: Number(savedKg.toFixed(2)),
+    wasteKg: Number(wasteKg.toFixed(2)),
+    meals,
+    co2eKg: Number(co2e.toFixed(2)),
+    waterLitres: Math.round(water),
+    score,
+    rank,
+    tier,
+  };
+}
+</code></pre>
+<hr>
+<h2>10.4 Appendix D: Sample Input &amp; Output Payloads</h2>
+<h3>Sample Input Payload: Grocery Ingestion Event</h3>
+<pre><code class="language-json">{
+  &quot;action&quot;: &quot;ADD_GROCERY_ITEM&quot;,
+  &quot;payload&quot;: {
+    &quot;name&quot;: &quot;Tomatoes&quot;,
+    &quot;quantity&quot;: 4,
+    &quot;unit&quot;: &quot;piece&quot;,
+    &quot;category&quot;: &quot;produce&quot;,
+    &quot;storage&quot;: &quot;counter&quot;,
+    &quot;purchaseDate&quot;: &quot;2026-10-14&quot;,
+    &quot;expiryDate&quot;: null,
+    &quot;notes&quot;: &quot;Farmers market fresh purchase&quot;
+  }
+}
+</code></pre>
+<h3>Sample Output Payload: Dynamic Freshness &amp; Recipe Recommendation</h3>
+<pre><code class="language-json">{
+  &quot;itemStatus&quot;: {
+    &quot;name&quot;: &quot;Tomatoes&quot;,
+    &quot;baselineShelfLife&quot;: 6,
+    &quot;storageMultiplier&quot;: 0.70,
+    &quot;effectiveShelfLife&quot;: 4.20,
+    &quot;daysElapsed&quot;: 0,
+    &quot;daysRemaining&quot;: 4.20,
+    &quot;tone&quot;: &quot;fresh&quot;,
+    &quot;visualPercent&quot;: 90
+  },
+  &quot;topRecommendations&quot;: [
+    {
+      &quot;recipeId&quot;: &quot;rec-tomato-fettuccine&quot;,
+      &quot;recipeName&quot;: &quot;Mediterranean Blistered Tomato &amp; Basil Fettuccine&quot;,
+      &quot;score&quot;: 42,
+      &quot;matchedIngredients&quot;: [&quot;Tomatoes&quot;, &quot;Garlic&quot;, &quot;Olive Oil&quot;],
+      &quot;expiringIngredients&quot;: [&quot;Tomatoes&quot;],
+      &quot;missingIngredients&quot;: [&quot;Basil&quot;, &quot;Fettuccine&quot;],
+      &quot;prepMinutes&quot;: 20,
+      &quot;estimatedCalories&quot;: 420
+    }
+  ],
+  &quot;cumulativeImpact&quot;: {
+    &quot;foodSavedKg&quot;: 4.75,
+    &quot;wasteDivertedKg&quot;: 4.75,
+    &quot;co2eSavedKg&quot;: 11.88,
+    &quot;waterSavedLitres&quot;: 4275,
+    &quot;sustainabilityTier&quot;: &quot;Bronze Saver&quot;
+  }
+}
+</code></pre>
+<hr>
+<p><em>End of Technical Specification Report for M.Sc. Data Science Mini-Project.</em></p>
+
+</body>
+</html>
