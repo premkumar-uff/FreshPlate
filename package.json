@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
+    "ai": "npm --prefix server start",
+    "ai:install": "npm --prefix server install",
     "pdf": "node scripts/generate-pdf.js"
   },
   "dependencies": {

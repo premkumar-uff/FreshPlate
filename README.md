@@ -35,6 +35,41 @@ src/
   state/        store.tsx (context + localStorage)
 ```
 
+## Optional AI server (Groq)
+
+FreshPlate works fully offline: scripted voice answers, demo scans and a local recipe engine.
+`server/` adds **optional** live AI on top; when it is not running, every screen falls back to its
+offline behaviour automatically.
+
+| Screen | Offline behaviour | With the AI server |
+| --- | --- | --- |
+| Voice Help (`/voice`) | Scripted, reviewed answers | Live cooking answers via Groq (`openai/gpt-oss-20b`); safety questions always use the reviewed instant reply |
+| Scan (`/scan`) | Demo scan (random catalog item) | Real food-photo recognition via `qwen/qwen3.8-27b`, with alternative guesses you can switch between |
+| Cook → Make something | Local recipe builder | "Plan 3 days with AI" turns your chosen ingredients into a three-day meal plan |
+
+Setup:
+
+```bash
+cd server
+npm install
+copy .env.example .env    # Windows; use cp on macOS/Linux
+# edit .env and add your GROQ_API_KEY from https://console.groq.com/keys
+npm start                 # or: npm run ai from the project root
+```
+
+Then run `npm run dev` in a second terminal — Vite proxies `/api` to `http://127.0.0.1:3000`.
+The web app checks `/api/health` once per session and shows "AI server offline" states when it is
+not there. For a phone on the same network, set `VITE_API_BASE=http://<your-computer-ip>:3000`
+and allow port 3000 through your firewall.
+
+Endpoints: `POST /api/chat`, `POST /api/food-photo`, `POST /api/meal-plan`,
+`POST /api/voice/transcribe`, `GET /api/health`. Models are overridable via `.env`
+(`TEXT_MODEL`, `VISION_MODEL`, `TRANSCRIBE_MODEL`).
+
+**Security:** the Groq key lives only in `server/.env` (git-ignored) — never in `src/`. This is a
+demo server: add authentication, rate limiting and strict CORS (`CORS_ORIGINS` in `.env`) before
+deploying it anywhere public.
+
 ## Notes
 
 - **Freshness is always an estimate**, derived from food type, storage and dates — never a guarantee.

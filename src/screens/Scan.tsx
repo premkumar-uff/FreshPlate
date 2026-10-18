@@ -1,8 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, Barcode as BarcodeIcon, PencilLine, Loader2, Check } from "lucide-react";
 import { CATALOG, findCatalog } from "../data/catalog";
 import { addDaysISO, todayISO } from "../lib/freshness";
+import { namesMatch } from "../lib/match";
+import { analyzeFoodPhoto, getAiStatus, type AiStatus, type VisionItem } from "../lib/api";
 import { useFreshPlate } from "../state/store";
 import {
   BackHeader,
@@ -23,6 +25,11 @@ const SAMPLE_BARCODES: Record<string, string> = {
   "8909876543210": "Curd",
 };
 
+function catalogName(item: VisionItem): string {
+  const match = CATALOG.find((entry) => namesMatch(entry.name, item.name));
+  return match ? match.name : item.name;
+}
+
 export default function Scan() {
   const navigate = useNavigate();
   const { addItem } = useFreshPlate();
@@ -40,6 +47,19 @@ export default function Scan() {
   const [expiryDate, setExpiryDate] = useState("");
   const [notes, setNotes] = useState("");
   const [saved, setSaved] = useState(false);
+  const [ai, setAi] = useState<AiStatus | null>(null);
+  const [candidates, setCandidates] = useState<string[]>([]);
+  const [photoNote, setPhotoNote] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    getAiStatus().then((value) => {
+      if (!cancelled) setAi(value);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function applyDetected(itemName: string) {
     const entry = findCatalog(itemName);
@@ -57,6 +77,43 @@ export default function Scan() {
       applyDetected(pool[Math.floor(Math.random() * pool.length)].name);
       setScanning(false);
     }, 1100);
+  }
+
+  async function analyzePhoto(file: File) {
+    setScanning(true);
+    setDetected(null);
+    setCandidates([]);
+    setPhotoNote("");
+    try {
+      const result = await analyzeFoodPhoto(file, file.name || "photo.jpg");
+      setScanning(false);
+      const mapped = result.items
+        .map(catalogName)
+        .filter((name, index, all) => name.trim() && all.indexOf(name) === index);
+      if (!mapped.length) {
+        setPhotoNote(result.summary || "Nothing recognisable in this photo.");
+        setMode("manual");
+        return;
+      }
+      applyDetected(mapped[0]);
+      setCandidates(mapped.slice(1));
+      setPhotoNote(result.summary);
+    } catch {
+      setPhotoNote("The AI server could not read this photo — running a demo scan instead.");
+      simulatePhotoScan();
+    }
+  }
+
+  async function handlePhotoChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (ai === "online") {
+      await analyzePhoto(file);
+    } else {
+      if (ai === "offline") setPhotoNote("AI server offline — ran a demo scan instead.");
+      simulatePhotoScan();
+    }
   }
 
   function lookupBarcode(code: string) {
@@ -138,7 +195,7 @@ export default function Scan() {
               accept="image/*"
               capture="environment"
               className="hidden"
-              onChange={simulatePhotoScan}
+              onChange={handlePhotoChange}
             />
             <TagButton full onClick={() => photoInput.current?.click()} disabled={scanning}>
               <Camera size={16} /> {scanning ? "Recognising…" : "Take photo"}
@@ -146,6 +203,33 @@ export default function Scan() {
             <TagButton full variant="outline" onClick={simulatePhotoScan} disabled={scanning}>
               Run a demo scan
             </TagButton>
+            <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-soft">
+              {ai === null
+                ? "Checking assistant…"
+                : ai === "online"
+                  ? "Live recognition · Groq AI"
+                  : "Demo scans · AI server offline"}
+            </p>
+            {candidates.length ? (
+              <div className="flex flex-wrap items-center gap-1.5 text-left">
+                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-soft">
+                  Also saw
+                </span>
+                {candidates.map((name) => (
+                  <Chip key={name} onClick={() => applyDetected(name)}>
+                    {name}
+                  </Chip>
+                ))}
+              </div>
+            ) : null}
+            {photoNote ? (
+              <p className="rounded-[8px] border border-rule bg-ground p-2.5 text-left text-[11px] leading-relaxed text-soft">
+                <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink">
+                  AI guess
+                </span>{" "}
+                — {photoNote} A photo is never proof: confirm the item before saving.
+              </p>
+            ) : null}
           </PackageCard>
         ) : null}
 

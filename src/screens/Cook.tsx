@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Clock, Users, Plus, AlertTriangle } from "lucide-react";
+import { Clock, Users, Plus, AlertTriangle, Loader2 } from "lucide-react";
 import { CATALOG } from "../data/catalog";
 import { buildRecipeFromIngredients, recommendRecipes } from "../lib/recipeEngine";
+import { generateMealPlan, getAiStatus, type AiStatus } from "../lib/api";
 import { useFreshPlate } from "../state/store";
 import {
   Chip,
@@ -23,6 +24,43 @@ export default function Cook() {
   const [selected, setSelected] = useState<string[]>([]);
   const [customInput, setCustomInput] = useState("");
   const [built, setBuilt] = useState<ReturnType<typeof buildRecipeFromIngredients> | null>(null);
+  const [ai, setAi] = useState<AiStatus | null>(null);
+  const [aiPlan, setAiPlan] = useState("");
+  const [planning, setPlanning] = useState(false);
+  const [planNote, setPlanNote] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    getAiStatus().then((value) => {
+      if (!cancelled) setAi(value);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function planWithAi() {
+    if (planning || !selected.length) return;
+    setPlanning(true);
+    setAiPlan("");
+    setPlanNote("");
+    try {
+      const plan = await generateMealPlan({
+        ingredients: selected,
+        owned: ownedNames,
+        days: 3,
+      });
+      setAiPlan(plan);
+    } catch (error) {
+      setPlanNote(
+        error instanceof Error && error.message
+          ? error.message
+          : "The meal plan could not be generated."
+      );
+    } finally {
+      setPlanning(false);
+    }
+  }
 
   const recommendations = useMemo(() => recommendRecipes(groceries, 3), [groceries]);
   const ownedNames = Array.from(new Set(groceries.map((item) => item.name)));
@@ -197,6 +235,41 @@ export default function Cook() {
               </TagButton>
             </PackageCard>
           ) : null}
+
+          <PackageCard tab="AI plan" className="space-y-3 p-4 pt-5">
+            <ShelfStrip guide={ai === "online" ? "3 days" : undefined}>Plan meals with AI</ShelfStrip>
+            <p className="text-[12px] leading-relaxed text-soft">
+              Turn your chosen ingredients into a three-day meal plan with quantities, steps and
+              timings. The plan is AI-generated guidance — always check allergens yourself.
+            </p>
+            {ai === "online" ? (
+              <TagButton full onClick={planWithAi} disabled={planning || selected.length < 1}>
+                {planning ? (
+                  <>
+                    <Loader2 size={15} className="motion-safe:animate-spin" /> Planning…
+                  </>
+                ) : (
+                  "Plan 3 days with AI"
+                )}
+              </TagButton>
+            ) : (
+              <p className="rounded-[8px] border border-rule bg-ground p-2.5 text-[11px] font-semibold text-soft">
+                {ai === null
+                  ? "Checking the AI assistant…"
+                  : "AI plans are offline. Start the AI server (see README), or build a recipe locally above."}
+              </p>
+            )}
+            {planNote ? (
+              <p className="rounded-[8px] border border-tag-orange/40 bg-tag-orange/5 p-2.5 text-[11px] font-semibold text-tag-orange">
+                {planNote}
+              </p>
+            ) : null}
+            {aiPlan ? (
+              <div className="whitespace-pre-wrap rounded-[8px] border border-rule bg-ground p-3 text-[12px] leading-relaxed text-ink">
+                {aiPlan}
+              </div>
+            ) : null}
+          </PackageCard>
         </div>
       )}
     </div>

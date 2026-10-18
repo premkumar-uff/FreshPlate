@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Mic, MicOff, Volume2, ShieldAlert } from "lucide-react";
 import { BackHeader, Chip, PackageCard, ShelfStrip, TagButton } from "../components/ui";
+import { getAiStatus, sendChat, transcribeAudio, type AiStatus, type ChatTurn } from "../lib/api";
 
 interface SpeechRecognitionLike {
   lang: string;
@@ -96,13 +97,29 @@ function answer(question: string): { reply: string; safety: boolean } {
 export default function VoiceHelp() {
   const [status, setStatus] = useState<"idle" | "listening" | "thinking" | "speaking">("idle");
   const [heard, setHeard] = useState("");
+  const [ai, setAi] = useState<AiStatus | null>(null);
+  const [answerSource, setAnswerSource] = useState<"live" | "demo" | null>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const mediaRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const historyRef = useRef<ChatTurn[]>([]);
   const supported = useRef<boolean>(getRecognition() !== null);
   const timersRef = useRef<number[]>([]);
 
   useEffect(() => {
+    let cancelled = false;
+    getAiStatus().then((value) => {
+      if (!cancelled) setAi(value);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     return () => {
       recognitionRef.current?.stop();
+      if (mediaRef.current?.state === "recording") mediaRef.current.stop();
       timersRef.current.forEach((id) => window.clearTimeout(id));
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel();
@@ -110,24 +127,86 @@ export default function VoiceHelp() {
     };
   }, []);
 
-  function respond(question: string) {
+  async function respond(question: string) {
     setStatus("thinking");
-    const thinkTimer = window.setTimeout(() => {
-      const { reply } = answer(question);
-      setStatus("speaking");
-      speak(reply);
-      const idleTimer = window.setTimeout(
-        () => setStatus("idle"),
-        Math.max(2500, reply.length * 55)
-      );
-      timersRef.current.push(idleTimer);
-    }, 700);
-    timersRef.current.push(thinkTimer);
+    const isSafety = SAFETY_PATTERNS.some((pattern) => pattern.test(question));
+
+    let reply: string;
+    let source: "live" | "demo" = "demo";
+
+    if (!isSafety && ai === "online") {
+      try {
+        reply = await sendChat({ message: question, history: historyRef.current });
+        source = "live";
+      } catch {
+        reply = answer(question).reply;
+      }
+    } else {
+      // Safety questions always get the reviewed instant reply, AI or not.
+      reply = answer(question).reply;
+    }
+
+    historyRef.current = [
+      ...historyRef.current,
+      { role: "user" as const, content: question },
+      { role: "assistant" as const, content: reply },
+    ].slice(-8);
+
+    setAnswerSource(source);
+    setStatus("speaking");
+    speak(reply);
+    const idleTimer = window.setTimeout(
+      () => setStatus("idle"),
+      Math.max(2500, reply.length * 55)
+    );
+    timersRef.current.push(idleTimer);
+  }
+
+  async function dictateWithServer() {
+    // Browsers without Web Speech API: record, transcribe on the AI server.
+    if (mediaRef.current?.state === "recording") return;
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recorder = new MediaRecorder(stream);
+    chunksRef.current = [];
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) chunksRef.current.push(event.data);
+    };
+    recorder.onstop = () => {
+      stream.getTracks().forEach((track) => track.stop());
+      const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
+      setStatus("thinking");
+      transcribeAudio(blob, "question.webm")
+        .then((text) => {
+          if (!text) throw new Error("empty");
+          setHeard(text);
+          void respond(text);
+        })
+        .catch(() => {
+          setHeard("Could not hear you clearly.");
+          setStatus("idle");
+        });
+    };
+    mediaRef.current = recorder;
+    recorder.start();
+    setStatus("listening");
+  }
+
+  function stopListening() {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    } else if (mediaRef.current?.state === "recording") {
+      mediaRef.current.stop();
+    }
   }
 
   function startListening() {
     const recognition = getRecognition();
     if (!recognition) {
+      if (ai === "online" && navigator.mediaDevices) {
+        dictateWithServer().catch(() => respond("Is this step safe?"));
+        return;
+      }
       respond("Is this step safe?");
       return;
     }
@@ -138,7 +217,7 @@ export default function VoiceHelp() {
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
       setHeard(transcript);
-      respond(transcript);
+      void respond(transcript);
     };
     recognition.onerror = () => setStatus("idle");
     recognition.onend = () => setStatus((value) => (value === "listening" ? "idle" : value));
@@ -157,6 +236,13 @@ export default function VoiceHelp() {
           ? "Speaking"
           : "Tap to ask";
 
+  const sourceLabel =
+    ai === null
+      ? "Checking assistant…"
+      : ai === "online"
+        ? "Live answers · Groq AI"
+        : "Demo answers · AI server offline";
+
   return (
     <div className="min-h-full px-4 pb-12 pt-4 lg:px-8">
       <div className="mx-auto w-full max-w-2xl space-y-5">
@@ -164,7 +250,7 @@ export default function VoiceHelp() {
 
         <PackageCard className="flex flex-col items-center gap-4 p-6 text-center">
           <button
-            onClick={() => (status === "listening" ? recognitionRef.current?.stop() : startListening())}
+            onClick={() => (status === "listening" ? stopListening() : startListening())}
             aria-label={status === "listening" ? "Stop listening" : "Start listening"}
             className={`grid h-32 w-32 place-items-center rounded-full border-[3px] border-ink transition active:translate-y-px ${
               status === "listening" ? "bg-tag-red text-white" : "bg-tag-canary text-ink"
@@ -176,6 +262,11 @@ export default function VoiceHelp() {
             <p className="text-[22px] font-black uppercase leading-none tracking-[0.02em]">{label}</p>
             <p className="mt-1.5 text-xs text-soft">
               Ask about the current step, quantities or safety. The answer plays as audio only.
+            </p>
+            <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-soft">
+              {sourceLabel}
+              {answerSource === "live" ? " · last answer live" : ""}
+              {answerSource === "demo" ? " · last answer demo" : ""}
             </p>
           </div>
           {heard ? (
@@ -197,14 +288,14 @@ export default function VoiceHelp() {
                 key={question}
                 onClick={() => {
                   setHeard(question);
-                  respond(question);
+                  void respond(question);
                 }}
               >
                 {question}
               </Chip>
             ))}
           </div>
-          {!supported.current ? (
+          {!supported.current && ai !== "online" ? (
             <p className="text-[11px] font-semibold text-tag-orange">
               Live speech recognition is unavailable in this browser. Example questions still work.
             </p>
